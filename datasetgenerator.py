@@ -1,6 +1,9 @@
 import pickle
 import random
-from tqdm import tqdm
+from tqdm import tqdm, trange
+from itertools import cycle
+from copy import deepcopy
+import numpy as np
 
 def gen_loss(di):
     SQUASH = 1000
@@ -10,7 +13,7 @@ def sim_add(di, gen):
     di = di.copy()
     for key in gen:
         if key in di.keys():
-            di[key] -= 1/len(di)
+            di[key] -= 1/len(gen)
     return di
 
 def randomrange(n):
@@ -18,7 +21,7 @@ def randomrange(n):
     random.shuffle(l)
     return l
 
-def gen_dataset(movielist, tv_split=0.3, v_split=0.3):
+def gen_dataset(movielist, tv_split=0.7, v_split=0.3):
     data    = {x['imdb-id']: x['genres'] for x in movielist}
     data    = list(data.items())
     genres  = {item for sublist in data for item in sublist[1]}
@@ -31,26 +34,45 @@ def gen_dataset(movielist, tv_split=0.3, v_split=0.3):
 
     for gen, count in sorted(wcounts.items(), key=lambda x:x[1], reverse=True):
         if count >= avg_wcount * 0.1:
-            print("{:>12}: {:.2f}".format(gen, count))
+            pass
+            #print("{:>12}: {:.2f}".format(gen, count))
         else:
             genres.remove(gen)
-            print("{:>12}: {:.2f} -- removed".format(gen, count))
-    
-    min_wcount = min([x for x in wcounts.items() if x[0] in genres], key=lambda x:x[1])
-    print(min_wcount)
+            #print("{:>12}: {:.2f} -- removed".format(gen, count))
 
 
-    d = lambda x: dict(zip(genres, [x]*len(genres)))
+    d = lambda x: {genre: wcounts[genre] * x for genre in genres}
     c = {}
-    c['train'] = min_wcount[1] * tv_split * (1-v_split)
-    c['val']   = min_wcount[1] * tv_split * v_split
-    c['test']  = min_wcount[1] * (1-tv_split)
+    c['train'] = tv_split * (1-v_split)
+    c['val']   = tv_split * v_split
+    c['test']  = (1-tv_split)
+    #print(c)
 
     state = {'train': {'gen_c': d(c['train']), 'ids': []},
                'val': {'gen_c': d(c['val']),   'ids': []},
-              'test': {'gen_c': d(c['test']),  'ids': []}, }
+              'test': {'gen_c': d(c['test']),  'ids': []},
+              'drop': {'ids': []}}
+    full_state = deepcopy(state)
     dropped = 0
+
+    sets = ["train", "val", "test"]
+    data_left = list(range(len(data)))
+    while len(data_left) > 0:
+        idx = random.choice(data_left)
+        random.shuffle(sets)
+        for s in sets:
+            sim = sim_add(state[s]['gen_c'], data[idx][1])
+            if len([1 for x in sim.values() if x < 0]) == 0:
+                state[s]['gen_c'] = sim
+                state[s]['ids']  += [idx]
+                data_left.remove(idx)
+                break
+        else:
+            state['drop']['ids'] += [idx]
+            data_left.remove(idx)
+            dropped += 1
     
+    """
     # for i, (id, gen) in enumerate(tqdm(data.values(), desc='-')):
     for i in tqdm(randomrange(len(data)), desc='-'):
         gen = data[i][1]
@@ -67,14 +89,49 @@ def gen_dataset(movielist, tv_split=0.3, v_split=0.3):
             # state[drop]['img_c'] += 1
         else:
             dropped += 1
-    
-    pickle.dump((state, dropped), open("tmp-pickle.p", 'wb'))
-        
+
+    errs = []
     for curr, val in state.items():
-        print("=== {}-set: {} ({:.2f}%) ===".format(curr, len(val['ids']), len(val['ids']) / (len(data) - dropped) * 100))
+        if curr == "drop": continue
+        print("==== {}-set: {} ({:.2f}%) ====".format(curr, len(val['ids']), len(val['ids']) / (len(data) - dropped) * 100))
+        for gen, am in sorted(val['gen_c'].items(), key=lambda x:x[1]):
+            err = am / full_state[curr]['gen_c'][gen]
+            print(" -> {:>12}: {:> 5.1f} ({:>5.2f}%)".format(gen, am, errs[-1]*100))
+    """
+    errs = []
+    for curr, val in state.items():
+        if curr == "drop": continue
+        sumerr = sum(full_state[curr]['gen_c'].values())
         for gen, am in val['gen_c'].items():
-            print(" -> {}: {:> 5.1f} ({:.2f}%)".format(gen, c[curr] - am, (c[curr] - am) / min_wcount[1] * 100))
+            real_amount   = (full_state[curr]['gen_c'][gen] - am) / sumerr
+            should_amount = wcounts[gen] / sum(wcounts.values())
+            errs.append((should_amount - real_amount) / should_amount)
+            val['gen_c'][gen] = errs[-1]
+    
+    return np.sqrt(np.sum(np.array(errs) ** 2)), state
+
+
 
 if __name__ == '__main__':
     ml = pickle.load(open("movielist", 'rb'))
-    gen_dataset(ml)
+
+    best_score = np.inf
+    best_state = None
+    for __ in trange(100):
+        score, state = gen_dataset(ml)
+        if score < best_score:
+            best_score = score
+            best_state = state
+    
+    for key in best_state.keys():
+        best_state[key]['ids'] = [ml[x]['imdb-id'] for x in best_state[key]['ids']]
+    pickle.dump(best_state, open("dataset.p", 'wb'))
+
+    data = {x['imdb-id']: x['genres'] for x in ml}
+
+    # state2 = {s:[data[x][0] for x in v['ids']] for s, v in state.items()}
+    for curr, val in best_state.items():
+        if curr == "drop": continue
+        print("==== {}-set: {} ({:.2f}%) ====".format(curr, len(val['ids']), len(val['ids']) / (len(data)) * 100))
+        for gen, am in sorted(val['gen_c'].items(), key=lambda x:x[1]):
+            print(" -> {:>12}: {:> 8.3f}%".format(gen, am * 100))
