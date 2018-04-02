@@ -53,9 +53,7 @@ def dense161_last(cuda):
     model = tvm.densenet161(pretrained=True)
     feats = [None]
     def feat_hook(m, i, o):
-        print(i)
-        exit()
-        feats[0].copy_(i.data.view(i.size(0), -1))
+        feats[0].copy_(i[0].data.view(i.size(0), -1))
     model._modules.get("classifier").register_forward_hook(feat_hook)
     def feat_extr(x):
         feats[0] = torch.zeros(x.size(0), 2208)
