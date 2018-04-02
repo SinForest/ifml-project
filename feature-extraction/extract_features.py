@@ -11,7 +11,7 @@ import h5py
 
 from extractors import *
 
-DATASET_PATH = "../dataset.p"
+DATASET_PATH = "../sets/set_splits.p.p"
 POSTER_PATH  = "../posters/"
 CUDA_ON = True
 
