@@ -109,6 +109,6 @@ if __name__ == '__main__':
         print("==== {}-set: {} ({:.2f}%) ====".format(curr, len(val['ids']), len(val['ids']) / (len(data)) * 100))
         for gen, am in sorted(val['gen_c'].items(), key=lambda x:x[1]):
             print(" -> {:>12}: {:> 8.3f}%".format(gen, am * 100))
-        for key, gens in zip(best_state[key]['ids'], best_state[key]['labels']):
+        for key, gens in zip(val['ids'], val['labels']):
             fh.write(key + "," + ",".join(gens) + "\n")
         fh.close()

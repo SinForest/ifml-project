@@ -42,11 +42,20 @@ class PosterSet(torch.utils.data.Dataset):
     def __len__(self):
         return len(self.X)
 
-model = tvm.alexnet(pretrained=True)
-nc = nn.Sequential(*list(model.classifier.children())[:3])
-model.classifier = nc
-model.eval()
-if CUDA_ON: model.cuda()
+def alex_fc6():
+    model = tvm.alexnet(pretrained=True)
+    nc = nn.Sequential(*list(model.classifier.children())[:3])
+    model.classifier = nc
+    model.eval()
+    return model
+
+def alex_fc7():
+    model = tvm.alexnet(pretrained=True)
+    nc = nn.Sequential(*list(model.classifier.children())[:-1])
+    model.classifier = nc
+    model.eval()
+    return model
+
 
 h5 = h5py.File("./sets/features.h5", 'a')
 p = pickle.load(open(DATASET_PATH, 'rb'))
