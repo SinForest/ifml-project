@@ -51,7 +51,7 @@ p = pickle.load(open(DATASET_PATH, 'rb'))
 
 for extr_name in ["alex_fc6", "alex_fc7", "vgg19bn_fc6", "vgg19bn_fc7", "res50_avg", "dense161_last"]:
     extr = eval("{}()".format(extr_name))
-    h5 = h5py.File("./feats/features_{}.h5".format(extr_name), 'a')
+    h5 = h5py.File("../feats/features_{}.h5".format(extr_name), 'a')
 
     dataset = PosterSet(POSTER_PATH, p, 'all')
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False, num_workers=1)
