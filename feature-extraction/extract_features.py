@@ -57,7 +57,7 @@ h5      = h5py.File("../sets/features_all.h5", 'a')
 dataset = PosterSet(POSTER_PATH, p, 'all', gen_d)
 dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False, num_workers=1)
 
-h5.create_dataset("labels", data=np.concatenate([y for __, y in dataloader]))
+h5.create_dataset("labels", data=np.stack([y for __, y in tqdm(dataset)]))
 h5.create_dataset("ids", data=np.array([s.encode('utf8') for s in dataset.ids]))
 
 
