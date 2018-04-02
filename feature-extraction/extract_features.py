@@ -3,7 +3,7 @@ import torchvision
 import torch.nn as nn
 import torch
 import numpy as np
-from imageio import imread
+from PIL import Image
 from scipy.misc import imresize
 from torch.autograd import Variable
 from tqdm import tqdm
@@ -16,21 +16,9 @@ POSTER_PATH  = "../posters/"
 CUDA_ON = True
 
 class PosterSet(torch.utils.data.Dataset):
-    def load_one_sample(self, fname):
-        try:
-            im = imread(self.path + fname + ".jpg").astype(np.float32) / 255
-            if len(im.shape) == 2:
-                im = np.stack([im]*3, axis=2)
-            print(im.shape)
-            exit()
-            im = imresize(im, (224, 224, 3))
-            im = np.transpose(im, (2,0,1))
-            return im
-        except Exception as e:
-            print("Error on: " + fname)
-            print("Shape: " + str(im.shape))
-            raise e
-
+    def load1(self, fname):
+        im = Image.open(self.path + fname + ".jpg").convert("RGB")
+        return im
 
     def __init__(self, path, data, setname, debug=False):
         self.path = path
@@ -40,12 +28,12 @@ class PosterSet(torch.utils.data.Dataset):
             data['all']['labels'] = data['train']['labels'] + data['val']['labels'] + data['test']['labels']
         if debug:
             data[setname]['ids'] = data[setname]['ids'][:65]
-        self.X = [self.load_one_sample(iname) for iname in tqdm(data[setname]['ids'], desc='dataset')]
+        self.X = [self.load1(iname) for iname in tqdm(data[setname]['ids'], desc='dataset')]
         self.y = data[setname]['labels']
         norm = torchvision.transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                                  std=[0.229, 0.224, 0.225])
-        # scale = torchvision.transforms.Scale(224)
-        self.preproc = torchvision.transforms.Compose([torchvision.transforms.ToTensor(), norm])
+        scale = torchvision.transforms.Scale(224)
+        self.preproc = torchvision.transforms.Compose([scale, torchvision.transforms.ToTensor(), norm])
 
     def __getitem__(self, index):
         return self.preproc(self.X[index]), self.y[index]
