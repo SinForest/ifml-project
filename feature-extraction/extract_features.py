@@ -42,7 +42,7 @@ class PosterSet(torch.utils.data.Dataset):
         return len(self.X)
 
 p = pickle.load(open(DATASET_PATH, 'rb'))
-dataset = PosterSet(POSTER_PATH, p, 'all', debug=True)
+dataset = PosterSet(POSTER_PATH, p, 'all')
 dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False, num_workers=1)
 
 for extr_name in ["alex_fc6", "alex_fc7", "vgg19bn_fc6", "vgg19bn_fc7", "res50_avg", "dense161_last"]:
