@@ -3,35 +3,39 @@ import torch.nn as nn
 import torch
 
 
-def alex_fc6():
+def alex_fc6(cuda):
     model = tvm.alexnet(pretrained=True)
     nc = nn.Sequential(*list(model.classifier.children())[:3])
     model.classifier = nc
     model.eval()
+    if cuda: model.cuda()
     return model
 
-def alex_fc7():
+def alex_fc7(cuda):
     model = tvm.alexnet(pretrained=True)
     nc = nn.Sequential(*list(model.classifier.children())[:-1])
     model.classifier = nc
     model.eval()
+    if cuda: model.cuda()
     return model
 
-def vgg19bn_fc6():
+def vgg19bn_fc6(cuda):
     model = tvm.vgg19_bn(pretrained=True)
     nc = nn.Sequential(*list(model.classifier.children())[:2])
     model.classifier = nc
     model.eval()
+    if cuda: model.cuda()
     return model
 
-def vgg19bn_fc7():
+def vgg19bn_fc7(cuda):
     model = tvm.vgg19_bn(pretrained=True)
     nc = nn.Sequential(*list(model.classifier.children())[:-2])
     model.classifier = nc
     model.eval()
+    if cuda: model.cuda()
     return model
 
-def res50_avg():
+def res50_avg(cuda):
     model = tvm.resnet50(pretrained=True)
     feats = [None]
     def feat_hook(m, i, o):
@@ -42,9 +46,10 @@ def res50_avg():
         model(x)
         return feats[0]
     model.eval()
+    if cuda: model.cuda()
     return feat_extr
 
-def dense161_last():
+def dense161_last(cuda):
     model = tvm.densenet161(pretrained=True)
     feats = [None]
     def feat_hook(m, i, o):
@@ -55,4 +60,5 @@ def dense161_last():
         model(x)
         return feats[0]
     model.eval()
+    if cuda: model.cuda()
     return feat_extr

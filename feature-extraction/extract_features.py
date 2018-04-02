@@ -32,7 +32,7 @@ class PosterSet(torch.utils.data.Dataset):
         self.y = data[setname]['labels']
         norm = torchvision.transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                                  std=[0.229, 0.224, 0.225])
-        scale = torchvision.transforms.Scale(224)
+        scale = torchvision.transforms.Resize(224)
         self.preproc = torchvision.transforms.Compose([scale, torchvision.transforms.ToTensor(), norm])
 
     def __getitem__(self, index):
@@ -46,7 +46,7 @@ dataset = PosterSet(POSTER_PATH, p, 'all', debug=True)
 dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False, num_workers=1)
 
 for extr_name in ["alex_fc6", "alex_fc7", "vgg19bn_fc6", "vgg19bn_fc7", "res50_avg", "dense161_last"]:
-    extr = eval("{}()".format(extr_name))
+    extr = eval("{}({})".format(extr_name, CUDA_ON))
     h5 = h5py.File("../feats/features_{}.h5".format(extr_name), 'a')
 
     if CUDA_ON:
