@@ -44,7 +44,7 @@ def res50_avg(cuda):
     def feat_extr(x):
         feats[0] = torch.zeros(x.size(0), 2048)
         model(x)
-        return feats[0]
+        return torch.autograd.Variable(feats[0])
     model.eval()
     if cuda: model.cuda()
     return feat_extr
@@ -58,7 +58,7 @@ def dense161_last(cuda):
     def feat_extr(x):
         feats[0] = torch.zeros(x.size(0), 2208)
         model(x)
-        return feats[0]
+        return torch.autograd.Variable(feats[0])
     model.eval()
     if cuda: model.cuda()
     return feat_extr
