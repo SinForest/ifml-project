@@ -32,6 +32,7 @@ class PosterSet(torch.utils.data.Dataset):
     def __init__(self, path, data, setname):
         self.path = path
         if setname == 'all':
+            data['all'] = {}
             data['all']['ids'] = data['train']['ids'] + data['val']['ids'] + data['test']['ids']
             data['all']['labels'] = data['train']['labels'] + data['val']['labels'] + data['test']['labels']
         self.X = [self.load_one_sample(iname) for iname in tqdm(data[setname]['ids'], desc='dataset')]
