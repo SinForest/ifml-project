@@ -21,6 +21,8 @@ class PosterSet(torch.utils.data.Dataset):
             im = imread(self.path + fname + ".jpg").astype(np.float32) / 255
             if len(im.shape) == 2:
                 im = np.stack([im]*3, axis=2)
+            print(im.shape)
+            exit()
             im = imresize(im, (224, 224, 3))
             im = np.transpose(im, (2,0,1))
             return im
