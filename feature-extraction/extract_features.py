@@ -18,7 +18,7 @@ CUDA_ON = True
 class PosterSet(torch.utils.data.Dataset):
     def load_one_sample(self, fname):
         try:
-            im = imread(self.path + fname + ".jpg").astype(np.float32) / 255
+            im = np.array(imread(self.path + fname + ".jpg")).astype(np.float32) / 255
             if len(im.shape) == 2:
                 im = np.stack([im]*3, axis=2)
             im = np.transpose(im, (2,0,1))
