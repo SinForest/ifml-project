@@ -50,7 +50,8 @@ for extr_name in ["alex_fc6", "alex_fc7", "vgg19bn_fc6", "vgg19bn_fc7", "res50_a
     h5 = h5py.File("../feats/features_{}.h5".format(extr_name), 'a')
 
     if CUDA_ON:
-        feat = np.concatenate([extr(Variable(X).cuda()).cpu().data.numpy() for X, __ in tqdm(dataloader, desc=extr_name)])
+        # feat = np.concatenate([extr(Variable(X).cuda()).cpu().data.numpy() for X, __ in tqdm(dataloader, desc=extr_name)])
+        feat = np.concatenate([print(X.size()) for X, __ in tqdm(dataloader, desc=extr_name)])
     else:
         feat = np.concatenate([extr(Variable(X)).data.numpy() for X, __ in tqdm(dataloader, desc=extr_name)])
     
