@@ -3,7 +3,7 @@ import torchvision
 import torch.nn as nn
 import torch
 import numpy as np
-from PIL import Image
+from imageio import imread
 from scipy.misc import imresize
 from torch.autograd import Variable
 from tqdm import tqdm
