@@ -23,7 +23,7 @@ def randomrange(n):
 
 def gen_dataset(movielist, data, tv_split=0.7, v_split=0.3):
     data    = list(data.items())
-    genres  = {item for sublist in data for item in sublist[1]}
+    genres  = {item.strip() for sublist in data for item in sublist[1]}
     """
     gen_d   = dict(zip(genres, range(len(genres))))
     counts  = {genre: len([1 for x in data if genre in x[1]]) for genre in genres}
@@ -112,3 +112,8 @@ if __name__ == '__main__':
         for key, gens in zip(val['ids'], val['labels']):
             fh.write(key + "," + ",".join(gens) + "\n")
         fh.close()
+    
+    gen_d  = dict(zip(genres, range(len(genres))))
+    gen_d2 = {val: key for key, val in gen_d.items()}
+    gen_d.update(gen_d2)
+    pickle.dump(gen_d, open("./sets/gen_d.p", 'wb'))
