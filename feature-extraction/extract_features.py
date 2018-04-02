@@ -38,7 +38,7 @@ class PosterSet(torch.utils.data.Dataset):
         if debug:
             data[setname]['ids'] = data[setname]['ids'][:65]
         self.X = [self.load_one_sample(iname) for iname in tqdm(data[setname]['ids'], desc='dataset')]
-        self.y = data['labels']
+        self.y = data[setname]['labels']
         norm = torchvision.transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                                  std=[0.229, 0.224, 0.225])
         scale = torchvision.transforms.Scale(224)
@@ -51,13 +51,12 @@ class PosterSet(torch.utils.data.Dataset):
         return len(self.X)
 
 p = pickle.load(open(DATASET_PATH, 'rb'))
+dataset = PosterSet(POSTER_PATH, p, 'all', debug=True)
+dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False, num_workers=1)
 
 for extr_name in ["alex_fc6", "alex_fc7", "vgg19bn_fc6", "vgg19bn_fc7", "res50_avg", "dense161_last"]:
     extr = eval("{}()".format(extr_name))
     h5 = h5py.File("../feats/features_{}.h5".format(extr_name), 'a')
-
-    dataset = PosterSet(POSTER_PATH, p, 'all', debug=True)
-    dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False, num_workers=1)
 
     if CUDA_ON:
         feat = np.concatenate([extr(Variable(X).cuda()).cpu().data.numpy() for X, __ in tqdm(dataloader, desc=extr_name)])
