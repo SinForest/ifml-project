@@ -29,12 +29,14 @@ class PosterSet(torch.utils.data.Dataset):
             raise e
 
 
-    def __init__(self, path, data, setname):
+    def __init__(self, path, data, setname, debug=False):
         self.path = path
         if setname == 'all':
             data['all'] = {}
             data['all']['ids'] = data['train']['ids'] + data['val']['ids'] + data['test']['ids']
             data['all']['labels'] = data['train']['labels'] + data['val']['labels'] + data['test']['labels']
+        if debug:
+            data[setname]['ids'] = data[setname]['ids'][:65]
         self.X = [self.load_one_sample(iname) for iname in tqdm(data[setname]['ids'], desc='dataset')]
         self.y = data['labels']
         norm = torchvision.transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -54,11 +56,12 @@ for extr_name in ["alex_fc6", "alex_fc7", "vgg19bn_fc6", "vgg19bn_fc7", "res50_a
     extr = eval("{}()".format(extr_name))
     h5 = h5py.File("../feats/features_{}.h5".format(extr_name), 'a')
 
-    dataset = PosterSet(POSTER_PATH, p, 'all')
+    dataset = PosterSet(POSTER_PATH, p, 'all', debug=True)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False, num_workers=1)
 
     if CUDA_ON:
-        feat = np.concatenate([extr(Variable(X).cuda()).cpu().data.numpy() for X, __ in tqdm(dataloader, desc=s)])
+        feat = np.concatenate([extr(Variable(X).cuda()).cpu().data.numpy() for X, __ in tqdm(dataloader, desc=extr_name)])
     else:
-        feat = np.concatenate([extr(Variable(X)).data.numpy() for X, __ in tqdm(dataloader, desc=s)])
+        feat = np.concatenate([extr(Variable(X)).data.numpy() for X, __ in tqdm(dataloader, desc=extr_name)])
+    
     h5.create_dataset("feat", data=feat)
