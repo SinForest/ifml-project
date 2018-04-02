@@ -52,7 +52,7 @@ def frac_hot(y, d, twoway=True):
 
 p       = pickle.load(open(DATASET_PATH, 'rb'))
 gen_d   = pickle.load(open(GENRE_DICT_PATH, 'rb'))
-h5      = h5py.File("../feats/features_all.h5", 'a')
+h5      = h5py.File("../sets/features_all.h5", 'a')
 dataset = PosterSet(POSTER_PATH, p, 'all')
 dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False, num_workers=1)
 h5.create_dataset("labels", data=np.stack([frac_hot(y, gen_d) for __, y in tqdm(dataloader, desc="labels")]))
