@@ -8,6 +8,7 @@ from scipy.misc import imresize
 from torch.autograd import Variable
 from tqdm import tqdm
 import h5py
+import sys
 
 from extractors import *
 
@@ -60,12 +61,15 @@ dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False, 
 h5.create_dataset("labels", data=np.stack([y for __, y in tqdm(dataset)]))
 h5.create_dataset("ids", data=np.array([s.encode('utf8') for s in dataset.ids]))
 
+cuda_device = int(sys.argv[1]) if len(sys.argv) > 1 else 0
+
 
 for extr_name in ["alex_fc6", "alex_fc7", "vgg19bn_fc6", "vgg19bn_fc7", "res50_avg", "dense161_last"]:
     extr = eval("{}({})".format(extr_name, CUDA_ON))
 
     if CUDA_ON:
-        feat = np.concatenate([extr(Variable(X).cuda()).cpu().data.numpy() for X, __ in tqdm(dataloader, desc=extr_name)])
+        with torch.cuda.device(cuda_device):
+            feat = np.concatenate([extr(Variable(X).cuda()).cpu().data.numpy() for X, __ in tqdm(dataloader, desc=extr_name)])
     else:
         feat = np.concatenate([extr(Variable(X)).data.numpy() for X, __ in tqdm(dataloader, desc=extr_name)])
     
