@@ -102,8 +102,11 @@ if __name__ == '__main__':
             best_score = score
             best_state = state
     
+    #DEBUG:
+    pickle.dump(best_state, open("debug.p", 'wb'))
+
     for key in best_state.keys():
-        best_state[key]['ids'] = [ml[x]['imdb-id'] for x in best_state[key]['ids']]
+        best_state[key]['ids'] = [data_arg[x][0] for x in best_state[key]['ids']]
         best_state[key]['labels'] = [[y for y in data[x] if y in genres]for x in best_state[key]['ids']]
     pickle.dump(best_state, open(SET_PATH + "set_splits.p", 'wb'))
 
