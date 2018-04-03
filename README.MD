@@ -18,6 +18,7 @@ The crawled, downloaded and split data can be found [here](http://datasets.thesi
   + after `extract_features.py`
 
 The zip can be extracted in the root-dir of the repo, all files will be at their desired position.
+All files are **encryped with a password**, because we live in deep fear of the copyright law.
 
 ## Using the sets
 
@@ -77,4 +78,4 @@ Contains a list of dicts. Each dict represents a movie has the following entries
 + `["poster"]`: the URL of the movie-poster as *string*.
 
 
-Duplications are possible. **This is not needed anymore**, after `datasetgenerator.py` has been successfully executed.
+Duplications are possible. **This file is not needed anymore**, after `datasetgenerator.py` has been successfully executed.
