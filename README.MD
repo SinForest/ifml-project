@@ -1,5 +1,14 @@
 # Movie-Poster-Classification for IFML
 
+## Usage
+
++ use `./postercollector.py byGenre <N>` to collect the `./movielist`
+  + *`<N>`*: number of top-pages per genre to crawl
++ use `./postercollector.py download` to download all posters to `./posters/`
++ use `./datasetgenerator.py` to split the dataset into train/val/test
++ use `./feature-extraction/extract_features.py <dev>` to generate `./sets/features_all.h5`
+  + *`<dev>`*: CUDA device number, `-1` is CPU
+
 ## Using the sets
 
 The directory "sets" contains information about the split (train/val/test) of the dataset.  
