@@ -56,7 +56,7 @@ class PosterSet(torch.utils.data.Dataset):
         return len(self.X)
 
     def frac_hot(self, y):
-        num = int(len(gen_d) / 2)
+        num = int(len(self.gen_d) / 2)
         a = np.zeros(num)
         y = [self.gen_d[x] for x in y]
         a[y] = 1
