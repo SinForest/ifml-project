@@ -62,6 +62,10 @@ h5.create_dataset("labels", data=np.stack([y for __, y in tqdm(dataset)]))
 h5.create_dataset("ids", data=np.array([s.encode('utf8') for s in dataset.ids]))
 
 cuda_device = int(sys.argv[1]) if len(sys.argv) > 1 else 0
+if cuda_device == -1:
+    cuda_device = 0
+    CUDA_ON = False
+
 with torch.cuda.device(cuda_device):
 
     for extr_name in ["alex_fc6", "alex_fc7", "vgg19bn_fc6", "vgg19bn_fc7", "res50_avg", "dense161_last"]:
