@@ -49,7 +49,7 @@ d = dict(zip(h5["ids"], range(len(h5["ids"]))))
 idx_all = []
 for s in ["train", "val", "test"]:
     f = open(SETS_PATH + s + ".csv", 'r')
-    idx = np.array([d[line.split(",")[0]] for line in tqdm(f)])
+    idx = np.array([d[line.split(",")[0].encode('utf-8')] for line in tqdm(f)])
     idx_all.extend(idx)
     h5.create_dataset(s + "_idx", data=idx)
 
