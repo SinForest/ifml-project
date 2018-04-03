@@ -68,7 +68,7 @@ Has the following datasets:
 + `["res50\_avg"]`: features from ResNet50s layer (pytorch)
 + `["dense161\_last"]`: features from DenseNet (pytorch)
 
-### ./movielist
+### ./crawling/movielist
 
 Contains a list of dicts. Each dict represents a movie has the following entries:
 
