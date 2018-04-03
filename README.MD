@@ -63,10 +63,10 @@ All datasets are in the same order, so index [0] from all sets belongs to the sa
 Has the following datasets:
 + `["lables"]`: multi-hot-vectors, 1 for each label the sample has, 0 if not. For indices, see *gen_d*.
 + `["ids"]`: the imdb-id (=poster-id) of each sample
-+ `["alex\_fc6"]`, `["alex\_fc7"]`: features from AlexNet (pytorch)
-+ `["vgg19bn\_fc6"]`, `["vgg19bn\_fc7"]`: features from  VGG19 with batchnorm (pytorch)
-+ `["res50\_avg"]`: features from ResNet50s layer (pytorch)
-+ `["dense161\_last"]`: features from DenseNet (pytorch)
++ `["alex_fc6"]`, `["alex_fc7"]`: features from AlexNet (pytorch)
++ `["vgg19bn_fc6"]`, `["vgg19bn_fc7"]`: features from  VGG19 with batchnorm (pytorch)
++ `["res50_avg"]`: features from ResNet50s layer (pytorch)
++ `["dense161_last"]`: features from DenseNet (pytorch)
 
 ### ./crawling/movielist
 

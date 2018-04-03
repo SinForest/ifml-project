@@ -16,6 +16,7 @@ from core import PosterSet
 DATASET_PATH    = "../sets/set_splits.p"
 POSTER_PATH     = "../posters/"
 GENRE_DICT_PATH = "../sets/gen_d.p"
+SETS_PATH = "../sets/"
 CUDA_ON = True
 
 p       = pickle.load(open(DATASET_PATH, 'rb'))
@@ -43,3 +44,9 @@ with torch.cuda.device(cuda_device):
             feat = np.concatenate([extr(Variable(X)).data.numpy() for X, __ in tqdm(dataloader, desc=extr_name)])
         
         h5.create_dataset(extr_name, data=feat)
+
+d = dict(zip(h5["ids"], range(len(h5["ids"]))))
+for s in ["train", "val", "test"]:
+    f = open(SETS_PATH + s + ".csv", 'r')
+    idx = np.array([d[line.split(",")[0]] for line in tqdm(f)])
+    h5.create_dataset(s + "_idx", data=idx)

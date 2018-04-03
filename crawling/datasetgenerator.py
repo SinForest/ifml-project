@@ -4,8 +4,18 @@ from tqdm import tqdm, trange
 from itertools import cycle
 from copy import deepcopy
 import numpy as np
+import sys
+
+"""
+gets a movielist from postercollector.py
+splits into train/val/test
+outputs: gen_d.p
+outputs: set_splits.p
+outputs: train.csv, val.csv, test.csv
+"""
 
 SET_PATH = "../sets/"
+NUM_ITERATIONS = int(sys.argv[1]) if len(sys.argv) > 1 else 100
 
 def gen_loss(di):
     SQUASH = 1000
@@ -23,13 +33,7 @@ def randomrange(n):
     random.shuffle(l)
     return l
 
-def gen_dataset(movielist, data, tv_split=0.7, v_split=0.3):
-    data    = list(data.items())
-    genres  = {item.strip() for sublist in data for item in sublist[1]}
-    """
-    gen_d   = dict(zip(genres, range(len(genres))))
-    counts  = {genre: len([1 for x in data if genre in x[1]]) for genre in genres}
-    """
+def gen_dataset(movielist, data, genres, tv_split=0.7, v_split=0.3):
     wcounts = {genre: sum([1/len(x[1]) for x in data if genre in x[1]]) for genre in genres}
     avg_wcount = sum(wcounts.values()) / len(wcounts.values())
 
@@ -76,10 +80,10 @@ def gen_dataset(movielist, data, tv_split=0.7, v_split=0.3):
     errs = []
     for curr, val in state.items():
         if curr == "drop": continue
-        sumerr = sum(full_state[curr]['gen_c'].values())
+        sumerr = sum(full_state[curr]['gen_c'].values()) # size of set `curr`, meassured in partial genres
         for gen, am in val['gen_c'].items():
-            real_amount   = (full_state[curr]['gen_c'][gen] - am) / sumerr
-            should_amount = wcounts[gen] / sum(wcounts.values())
+            real_amount   = (full_state[curr]['gen_c'][gen] - am) / sumerr # current ratio of genre `gen`
+            should_amount = wcounts[gen] / sum(wcounts.values()) # ratio of genre in all data
             errs.append((should_amount - real_amount) / should_amount)
             val['gen_c'][gen] = errs[-1]
     
@@ -89,22 +93,23 @@ def gen_dataset(movielist, data, tv_split=0.7, v_split=0.3):
 
 if __name__ == '__main__':
     ml = pickle.load(open("movielist", 'rb'))
-    data = {x['imdb-id']: x['genres'] for x in ml}
+    data = {x['imdb-id']: [y.strip() for y in x['genres']] for x in ml}
+    data_arg = list(data.items())
+    genres   = {item for sublist in data_arg for item in sublist[1]}
 
     best_score = np.inf
     best_state = None
-    for __ in trange(100):
-        score, state = gen_dataset(ml, data)
+    for __ in trange(NUM_ITERATIONS):
+        score, state = gen_dataset(ml, data_arg, genres)
         if score < best_score:
             best_score = score
             best_state = state
     
     for key in best_state.keys():
         best_state[key]['ids'] = [ml[x]['imdb-id'] for x in best_state[key]['ids']]
-        best_state[key]['labels'] = [data[x]for x in best_state[key]['ids']]
+        best_state[key]['labels'] = [data[x] for x in best_state[key]['ids']]
     pickle.dump(best_state, open(SET_PATH + "set_splits.p", 'wb'))
 
-    # state2 = {s:[data[x][0] for x in v['ids']] for s, v in state.items()}
     for curr, val in best_state.items():
         if curr == "drop": continue
         fh = open(SET_PATH + "{}.csv".format(curr), 'w')
@@ -114,6 +119,7 @@ if __name__ == '__main__':
         for key, gens in zip(val['ids'], val['labels']):
             fh.write(key + "," + ",".join(gens) + "\n")
         fh.close()
+    print("==== dropped: {} ({:.2f}%) ====".format(len(best_state['drop']['ids']), len(best_state['drop']['ids']) / (len(data)) * 100))
     
     gen_d  = dict(zip(genres, range(len(genres))))
     gen_d2 = {val: key for key, val in gen_d.items()}

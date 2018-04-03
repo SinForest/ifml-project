@@ -19,6 +19,7 @@ class PosterSet(torch.utils.data.Dataset):
         gen_d:     dict - label transformation dict (gen_d.p)
                         > if not given, generated automatically
         normalize: bool - normalize images for torchvision.models
+        debug:     bool - use really small subset, if true
 
         """
         self.path = path
