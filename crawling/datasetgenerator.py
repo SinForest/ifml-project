@@ -34,18 +34,7 @@ def randomrange(n):
     random.shuffle(l)
     return l
 
-def gen_dataset(movielist, data, genres, tv_split=0.7, v_split=0.3):
-    wcounts = {genre: sum([1/len(x[1]) for x in data if genre in x[1]]) for genre in genres}
-    avg_wcount = sum(wcounts.values()) / len(wcounts.values())
-
-    for gen, count in sorted(wcounts.items(), key=lambda x:x[1], reverse=True):
-        if count >= avg_wcount * 0.1:
-            pass
-            #print("{:>12}: {:.2f}".format(gen, count))
-        else:
-            genres.remove(gen)
-            #print("{:>12}: {:.2f} -- removed".format(gen, count))
-
+def gen_dataset(movielist, data, genres, wcounts, tv_split=0.7, v_split=0.3):
 
     d = lambda x: {genre: wcounts[genre] * x for genre in genres}
     c = {}
@@ -97,18 +86,25 @@ if __name__ == '__main__':
     data = {x['imdb-id']: [y.strip() for y in x['genres']] for x in ml}
     data_arg = list(data.items())
     genres   = {item for sublist in data_arg for item in sublist[1]}
+    wcounts = {genre: sum([1/len(x[1]) for x in data_args if genre in x[1]]) for genre in genres}
+    avg_wcount = sum(wcounts.values()) / len(wcounts.values())
+    for gen, count in sorted(wcounts.items(), key=lambda x:x[1], reverse=True):
+        if count >= avg_wcount * 0.1:
+            pass
+        else:
+            genres.remove(gen)
 
     best_score = np.inf
     best_state = None
     for __ in trange(NUM_ITERATIONS):
-        score, state = gen_dataset(ml, data_arg, genres)
+        score, state = gen_dataset(ml, data_arg, genres, wcounts)
         if score < best_score:
             best_score = score
             best_state = state
     
     for key in best_state.keys():
         best_state[key]['ids'] = [ml[x]['imdb-id'] for x in best_state[key]['ids']]
-        best_state[key]['labels'] = [data[x] for x in best_state[key]['ids']]
+        best_state[key]['labels'] = [[y for y in data[x] if y in genres]for x in best_state[key]['ids']]
     pickle.dump(best_state, open(SET_PATH + "set_splits.p", 'wb'))
 
     missing = []
