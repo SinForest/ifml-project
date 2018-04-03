@@ -79,3 +79,10 @@ Contains a list of dicts. Each dict represents a movie has the following entries
 
 
 Duplications are possible. **This file is not needed anymore**, after `datasetgenerator.py` has been successfully executed.
+
+## Coding
+
+When adding a new feature **in a new branch**, you can use `ln -s ../core/core.py core.py` (maybe change `..` to the projects root directory) to access features from the core utillity, like:
+```python
+class PosterSet(torch.utils.data.Dataset) #wrapper class for dataset, preprocessing images
+```
