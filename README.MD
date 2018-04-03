@@ -9,6 +9,16 @@
 + use `./feature-extraction/extract_features.py <dev>` to generate `./sets/features_all.h5`
   + *`<dev>`*: CUDA device number, `-1` is CPU
 
+## Downloading the sets
+
+The crawled, downloaded and split data can be found [here](http://datasets.thesinforest.eu).
++ `posterset_*k.zip` contains data and labels
+  + after `datasetgenerator.py`
++ `posterset_*k_full.zip` additionally contains the features
+  + after `extract_features.py`
+
+The zip can be extracted in the root-dir of the repo, all files will be at their desired position.
+
 ## Using the sets
 
 The directory "sets" contains information about the split (train/val/test) of the dataset.  
