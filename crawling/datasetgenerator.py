@@ -5,6 +5,8 @@ from itertools import cycle
 from copy import deepcopy
 import numpy as np
 
+SET_PATH = "../sets/"
+
 def gen_loss(di):
     SQUASH = 1000
     return sum([(val / SQUASH) ** 2 for val in di.values()])
@@ -100,12 +102,12 @@ if __name__ == '__main__':
     for key in best_state.keys():
         best_state[key]['ids'] = [ml[x]['imdb-id'] for x in best_state[key]['ids']]
         best_state[key]['labels'] = [data[x]for x in best_state[key]['ids']]
-    pickle.dump(best_state, open("./sets/set_splits.p", 'wb'))
+    pickle.dump(best_state, open(SET_PATH + "set_splits.p", 'wb'))
 
     # state2 = {s:[data[x][0] for x in v['ids']] for s, v in state.items()}
     for curr, val in best_state.items():
         if curr == "drop": continue
-        fh = open("./sets/{}.csv".format(curr), 'w')
+        fh = open(SET_PATH + "{}.csv".format(curr), 'w')
         print("==== {}-set: {} ({:.2f}%) ====".format(curr, len(val['ids']), len(val['ids']) / (len(data)) * 100))
         for gen, am in sorted(val['gen_c'].items(), key=lambda x:x[1]):
             print(" -> {:>12}: {:> 8.3f}%".format(gen, am * 100))
@@ -116,4 +118,4 @@ if __name__ == '__main__':
     gen_d  = dict(zip(genres, range(len(genres))))
     gen_d2 = {val: key for key, val in gen_d.items()}
     gen_d.update(gen_d2)
-    pickle.dump(gen_d, open("./sets/gen_d.p", 'wb'))
+    pickle.dump(gen_d, open(SET_PATH + "gen_d.p", 'wb'))
