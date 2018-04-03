@@ -86,7 +86,7 @@ if __name__ == '__main__':
     data = {x['imdb-id']: [y.strip() for y in x['genres']] for x in ml}
     data_arg = list(data.items())
     genres   = {item for sublist in data_arg for item in sublist[1]}
-    wcounts = {genre: sum([1/len(x[1]) for x in data_args if genre in x[1]]) for genre in genres}
+    wcounts = {genre: sum([1/len(x[1]) for x in data_arg if genre in x[1]]) for genre in genres}
     avg_wcount = sum(wcounts.values()) / len(wcounts.values())
     for gen, count in sorted(wcounts.items(), key=lambda x:x[1], reverse=True):
         if count >= avg_wcount * 0.1:
