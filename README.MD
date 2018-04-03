@@ -6,6 +6,7 @@
   + *`<N>`*: number of top-pages per genre to crawl
 + use `./postercollector.py download` to download all posters to `./posters/`
 + use `./datasetgenerator.py` to split the dataset into train/val/test
+  + also reminds you of missing image files for manual download
 + use `./feature-extraction/extract_features.py <dev>` to generate `./sets/features_all.h5`
   + *`<dev>`*: CUDA device number, `-1` is CPU
 

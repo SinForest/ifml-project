@@ -4,7 +4,7 @@ from tqdm import tqdm, trange
 from itertools import cycle
 from copy import deepcopy
 import numpy as np
-import sys
+import sys, os
 
 """
 gets a movielist from postercollector.py
@@ -14,7 +14,8 @@ outputs: set_splits.p
 outputs: train.csv, val.csv, test.csv
 """
 
-SET_PATH = "../sets/"
+SET_PATH       = "../sets/"
+POSTER_PATH    = "../posters/"
 NUM_ITERATIONS = int(sys.argv[1]) if len(sys.argv) > 1 else 100
 
 def gen_loss(di):
@@ -110,6 +111,7 @@ if __name__ == '__main__':
         best_state[key]['labels'] = [data[x] for x in best_state[key]['ids']]
     pickle.dump(best_state, open(SET_PATH + "set_splits.p", 'wb'))
 
+    missing = []
     for curr, val in best_state.items():
         if curr == "drop": continue
         fh = open(SET_PATH + "{}.csv".format(curr), 'w')
@@ -118,8 +120,11 @@ if __name__ == '__main__':
             print(" -> {:>12}: {:> 8.3f}%".format(gen, am * 100))
         for key, gens in zip(val['ids'], val['labels']):
             fh.write(key + "," + ",".join(gens) + "\n")
+            if not os.path.exists(POSTER_PATH + key + ".jpg"):
+                missing.append(key)
         fh.close()
     print("==== dropped: {} ({:.2f}%) ====".format(len(best_state['drop']['ids']), len(best_state['drop']['ids']) / (len(data)) * 100))
+    print("\nMissing images: {}".format(" - ".join(missing) if missing != [] else "none"))
     
     gen_d  = dict(zip(genres, range(len(genres))))
     gen_d2 = {val: key for key, val in gen_d.items()}
