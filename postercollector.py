@@ -182,10 +182,11 @@ def top_movies():
         html = r.text
         soup = BeautifulSoup(html, 'lxml')
         titles = soup.select('.titleColumn a')
-        for title in titles:
-            id = title['href']
-            id = id[7:16]
-            ids.append(id)
+        if titles is not None:
+            for title in titles:
+                id = title['href']
+                id = id[7:16]
+                ids.append(id)
     except Exception as ex:
         print(str(ex))
     finally:
@@ -205,10 +206,13 @@ def movies_by_genre(genre, pages):
             html = r.text
             soup = BeautifulSoup(html, 'lxml')
             titles = soup.select('.lister-item-header a')
-            for title in titles:
-                id = title['href']
-                id = id[7:16]
-                ids.append(id)
+            if titles is not None:
+                for title in titles:
+                    id = title['href']
+                    id = id[7:16]
+                    ids.append(id)
+            else:
+                print('A problem occurred, skipping this page...')
         except Exception as ex:
             print(str(ex))
         
