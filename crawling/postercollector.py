@@ -66,7 +66,8 @@ def scrape_from_imdb_id(id):
             found_genres = genre_list.find(itemprop='genre').findAll('a')
             
             for genre in found_genres:
-                genres.append(genre.text)
+                genre_text = str.strip(genre.text)
+                genres.append(genre_text)
         if poster_section:
             poster = poster_section[0].img['src']
 
