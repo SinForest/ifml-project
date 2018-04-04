@@ -16,12 +16,13 @@ from core import PosterSet
 DATASET_PATH    = "../sets/set_splits.p"
 POSTER_PATH     = "../posters/"
 GENRE_DICT_PATH = "../sets/gen_d.p"
-SETS_PATH = "../sets/"
+SETS_PATH       = "../sets/"
+FEATURE_PATH    = "../sets/features_all.h5"
 CUDA_ON = True
 
 p       = pickle.load(open(DATASET_PATH, 'rb'))
 gen_d   = pickle.load(open(GENRE_DICT_PATH, 'rb'))
-h5      = h5py.File("../sets/features_all.h5", 'a')
+h5      = h5py.File(FEATURE_PATH, 'a')
 dataset = PosterSet(POSTER_PATH, p, 'all', gen_d=gen_d, normalize=True)
 dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=False, num_workers=1)
 

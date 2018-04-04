@@ -44,13 +44,13 @@ Conatain train/val/test-sets. Each row is a sample, first entry is the imdb-id (
 Following entrys are the labels of the sample.  
 
 e.g.:
-+ `tt12346, Action, Romance, Drama`
-+ `tt57890, Adventure`
++ `tt12346,Action,Romance,Drama`
++ `tt57890,Adventure`
 
 ### ./sets/set_splits.p
 
-Contains a dict with an entry for train/val/test and dropped (not used) movies.  
-Each entry is a dict itself, with `["ids"]` containing a list of imdb-ids in this set,  
+Contains a dict with an entry for `["train"]`/`["val"]`/`["test"]` and `["drop"]`ed (not used) movies.  
+Each entry is a dict itself, with `["ids"]` containing a list of imdb-ids in this set,
 and `["labels"]` being a list of the corresponding genres as strings.  
 (**WARNING:** could contain leading spaces).  
 
