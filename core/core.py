@@ -19,6 +19,7 @@ class PosterSet(torch.utils.data.Dataset):
         gen_d:     dict - label transformation dict (gen_d.p)
                         > if not given, generated automatically
         normalize: bool - normalize images for torchvision.models
+        debug:     bool - use really small subset, if true
 
         """
         self.path = path
@@ -55,7 +56,7 @@ class PosterSet(torch.utils.data.Dataset):
         return len(self.X)
 
     def frac_hot(self, y):
-        num = int(len(gen_d) / 2)
+        num = int(len(self.gen_d) / 2)
         a = np.zeros(num)
         y = [self.gen_d[x] for x in y]
         a[y] = 1
