@@ -31,9 +31,10 @@ def plot_losses(d, rnd):
     X, Y = zip(*d["val"].items())
     plt.clf()
     plt.plot(x, y, "g-", label='training')
-    plt.plot(x, y, "b-", label='validation')
+    plt.plot(X, Y, "b-", label='validation')
     plt.xlabel("Epochs")
     plt.ylabel("Loss")
+    plt.legend()
     plt.title("losses during training")
     plt.savefig(rnd + "/plot_current.png")
     copyfile(rnd + "/plot_current.png", rnd + "/plot_after_{}.png".format(max(x)))
@@ -89,6 +90,7 @@ for epoch in trange(1,101):
         net.eval() # puts model into 'eval' mode (some layers behave differently)
         va_sum = [l_fn(net(Var(X, volatile=True)), Var(y)).data[0] for X,y in va_load] # val forward passes
         print([net(Var(X, volatile=True)).data for X,y in va_load])
+        print([(X, y) for X,y in va_load][:2])
         losses["val"][epoch] = sum(va_sum) / len(va_set)
         tqdm.write("  -->{}Validating - loss: {:.5f}{}".format(TERM['g'], losses["val"][epoch], TERM['clr']))
 
