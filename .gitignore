@@ -1,3 +1,6 @@
 **/movielist
 **/__pycache__
 **/posterset_*.zip
+**/.vscode
+**/*.nn
+cnn_training/*/*.png
