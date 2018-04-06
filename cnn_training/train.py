@@ -12,6 +12,7 @@ import pickle
 import matplotlib.pyplot as plt
 from shutil import copyfile
 from multiprocessing import Process
+import itertools
 
 from model import SmallNetwork, DebugNetwork
 from core import PosterSet
@@ -20,7 +21,7 @@ DATASET_PATH    = "../sets/set_splits.p"
 POSTER_PATH     = "../posters/"
 GENRE_DICT_PATH = "../sets/gen_d.p"
 
-CUDA_ON = False
+CUDA_ON = True
 
 # dict for terminal colors
 TERM = {'y'  : "\33[33m",
@@ -61,14 +62,14 @@ def hook(m, i, o):
 gen_d = pickle.load(open(GENRE_DICT_PATH, 'rb'))
 split = pickle.load(open(DATASET_PATH, 'rb'))
 
-tr_set = PosterSet(POSTER_PATH, split, 'train', gen_d=gen_d, augment=True, debug=True)
-tr_load = DataLoader(tr_set, batch_size=32, shuffle=True, num_workers=6, drop_last=True)
+tr_set = PosterSet(POSTER_PATH, split, 'train', gen_d=gen_d, augment=True, resize=None)# debug=True)
+tr_load = DataLoader(tr_set, batch_size=128, shuffle=True, num_workers=3, drop_last=True)
 
-va_set = PosterSet(POSTER_PATH, split, 'val', gen_d=gen_d, augment=False, debug=True)
-va_load = DataLoader(va_set, batch_size=32, shuffle=False, num_workers=6, drop_last=True)
+va_set = PosterSet(POSTER_PATH, split, 'val', gen_d=gen_d, augment=False, resize=None)# debug=True)
+va_load = DataLoader(va_set, batch_size=128, shuffle=False, num_workers=3, drop_last=True)
 
 # prepare model and training utillity
-net  = DebugNetwork(tr_set[0][0].size()[1:], len(gen_d) // 2)
+net  = SmallNetwork(tr_set[0][0].size()[1:], len(gen_d) // 2)
 if CUDA_ON:
     net.cuda()
 l_fn = torch.nn.BCELoss(size_average=False)
@@ -82,7 +83,7 @@ for m in net.modules():
         m.register_forward_hook(hook)
 """
 losses = {"train":{}, "val":{}}
-va_delay  = 1 #DEBUG!
+va_delay  = 3
 bg_proc = None
 
 # generate random new folder to store all snapshots
@@ -93,11 +94,11 @@ os.mkdir(rnd_token)
 
 print("=== Starting Training with Token [{}] ===".format(rnd_token))
 
-for epoch in trange(1,101):
+for epoch in tqdm(itertools.count(1), desc="epochs:"):
     tr_err = 0
     net.train() # puts model into 'train' mode (some layers behave differently)
-    for X, y in tr_load:         # iterate over training set (in mini-batches)
-        X, y = (Var(X), Var(y)) if CUDA_ON else (Var(X).cuda(), Var(y).cuda())
+    for X, y in tqdm(tr_load, desc="train:"): # iterate over training set (in mini-batches)
+        X, y = (Var(X).cuda(), Var(y).cuda()) if CUDA_ON else (Var(X), Var(y))
         # wrap data into Variables (for back-prop) and maybe move to GPU
         
         #TRAINING-STEP:
@@ -117,10 +118,12 @@ for epoch in trange(1,101):
     if epoch % va_delay == 0:  # validate and save every <va_delay>th epoch
         net.eval() # puts model into 'eval' mode (some layers behave differently)
         if CUDA_ON:
-            va_sum = [l_fn(net(Var(X, volatile=True)).cuda(), Var(y).cuda()).data[0] for X,y in va_load] # val forward passes (GPU)
+            va_sum = [l_fn(net(Var(X, volatile=True).cuda()), Var(y).cuda()).data[0] for X,y in tqdm(va_load, desc="valid:")] # val forward passes (GPU)
+            # print([net(Var(X, volatile=True).cuda()).data for X,y in va_load])
         else:
-            va_sum = [l_fn(net(Var(X, volatile=True)), Var(y)).data[0] for X,y in va_load] # val forward passes (CPU)
-        print([net(Var(X, volatile=True)).data for X,y in va_load])
+            va_sum = [l_fn(net(Var(X, volatile=True)), Var(y)).data[0] for X,y in tqdm(va_load, desc="valid:")] # val forward passes (CPU)
+            # print([net(Var(X, volatile=True)).data for X,y in va_load])
+        
         #print([(X, y) for X,y in va_load][:2])
         losses["val"][epoch] = sum(va_sum) / len(va_set)
         tqdm.write("  -->{}Validating - loss: {:.5f}{}".format(TERM['g'], losses["val"][epoch], TERM['clr']))
