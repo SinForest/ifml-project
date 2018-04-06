@@ -43,7 +43,7 @@ class PosterSet(torch.utils.data.Dataset):
         else:
             self.gen_d = gen_d
 
-        self.X = [self.load1(iname) for iname in tqdm(data[setname]['ids'], desc='gen. ' + setname)]
+        self.X = [iname for iname in tqdm(data[setname]['ids'], desc='gen. ' + setname)]
         self.y = data[setname]['labels']
         self.ids = data[setname]['ids']
 
@@ -71,7 +71,7 @@ class PosterSet(torch.utils.data.Dataset):
         self.preproc = torchvision.transforms.Compose(scale + augmentation + [to_ten, norm])
 
     def __getitem__(self, index):
-        return self.preproc(self.X[index]), self.frac_hot(self.y[index])
+        return self.preproc(self.load1(self.X[index])), self.frac_hot(self.y[index])
 
     def __len__(self):
         return len(self.X)
