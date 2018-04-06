@@ -20,9 +20,10 @@ class PosterSet(torch.utils.data.Dataset):
         gen_d:     dict  - label transformation dict (gen_d.p)
                          > if not given, generated automatically
         tv_norm:   bool  - normalize images for torchvision.models
-                         > if false, calculates own mean/std
+                         > if false, does not normalize
         resize:    bool  - True resizes image to (224, 224) for torchvision
                    tuple - resizes images to (x, y)
+                   None  - resizes images to (182, 268)
         augment:   bool  - add minor random transformations to images
         debug:     bool  - use really small subset, if true
 
@@ -43,14 +44,9 @@ class PosterSet(torch.utils.data.Dataset):
         else:
             self.gen_d = gen_d
 
-        self.X = [iname for iname in tqdm(data[setname]['ids'], desc='gen. ' + setname)]
+        self.X = data[setname]['ids']
         self.y = data[setname]['labels']
         self.ids = data[setname]['ids']
-
-        to_ten = trans.ToTensor()
-        self.mean = [0.485, 0.456, 0.406] if tv_norm else (np.stack(self.X)/255).mean(axis=(0,1,2))
-        self.std  = [0.229, 0.224, 0.225] if tv_norm else (np.stack(self.X)/255).std(axis=(0,1,2))
-        norm = trans.Normalize(mean=self.mean, std=self.std)
 
         if resize == True:
             scale = [trans.Resize((224, 224))]
@@ -58,8 +54,15 @@ class PosterSet(torch.utils.data.Dataset):
             scale = []
         elif type(resize) == tuple and len(resize) == 2:
             scale = [trans.Resize(resize)]
+        elif resize is None:
+            scale = [trans.Resize((182, 268))]
         else:
             raise RuntimeError("resize needs to be bool or 2-tuple")
+
+        to_ten = trans.ToTensor()
+        self.mean = [0.485, 0.456, 0.406] if tv_norm else [0., 0., 0.]
+        self.std  = [0.229, 0.224, 0.225] if tv_norm else [1., 1., 1.]
+        norm = trans.Normalize(mean=self.mean, std=self.std)
         
         if augment:
             augmentation = [trans.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.03),

@@ -45,7 +45,8 @@ class SmallNetwork(AbstractNetwork):
     def __init__(self, inp_size, n_classes):
         super(SmallNetwork, self).__init__() # inp-size: 182x268
         self.inp_size = inp_size # tuple!
-        self.conv1 = nn.Sequential(nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1),
+        self.conv1 = nn.Sequential(nn.BatchNorm2d(3),
+                                   nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1),
                                    nn.PReLU(),
                                    nn.BatchNorm2d(16),
                                    nn.Conv2d(16, 16, kernel_size=3, stride=1, padding=1),
