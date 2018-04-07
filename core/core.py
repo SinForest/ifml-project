@@ -4,7 +4,8 @@ from tqdm import tqdm
 import torchvision
 import torchvision.transforms as trans
 import torch
-
+import matplotlib.pyplot as plt
+from shutil import copyfile
 
 class PosterSet(torch.utils.data.Dataset):
     def load1(self, fname):
@@ -85,3 +86,25 @@ class PosterSet(torch.utils.data.Dataset):
         y = [self.gen_d[x] for x in y]
         a[y] = 1
         return torch.Tensor(a)
+
+def plot_losses(d, folder):
+    """
+    @args:
+    d:       dict - ["train"]: dict - {epoch: loss, ...}
+                    ["val"]:   dict - {epoch: loss, ...}
+                    ["lr"]:    list - [<epoch, when lr reduced>, ...]
+    folder:  str  - folder to store plots in
+    """
+    x, y = zip(*d["train"].items())
+    X, Y = zip(*d["val"].items())
+    plt.clf()
+    plt.plot(x, y, "g-", label='training')
+    plt.plot(X, Y, "b-", label='validation')
+    plt.scatter(np.array(X)[d["lr"]], np.array(Y)[d["lr"]], c='b', marker='v')
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.title("losses during training")
+    plt.savefig(folder + "/plot_current.png")
+    copyfile(folder + "/plot_current.png", folder + "/plot_after_{}.png".format(max(x)))
+#[end] plot_losses(d)

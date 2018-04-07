@@ -11,12 +11,11 @@ from hashlib import md5
 from tqdm import tqdm, trange
 import pickle
 import matplotlib.pyplot as plt
-from shutil import copyfile
 from multiprocessing import Process
 import itertools
 
 from model import SmallNetwork, DebugNetwork
-from core import PosterSet
+from core import PosterSet, plot_losses
 
 DATASET_PATH    = "../sets/set_splits.p"
 POSTER_PATH     = "../posters/"
@@ -39,21 +38,6 @@ class ReduceLROnPlateauWithLog(torch.optim.lr_scheduler.ReduceLROnPlateau):
     def _reduce_lr(self, epoch):
         self.logger.append(epoch)
         return super(ReduceLROnPlateauWithLog, self)._reduce_lr(epoch)
-
-def plot_losses(d, rnd):
-    x, y = zip(*d["train"].items())
-    X, Y = zip(*d["val"].items())
-    plt.clf()
-    plt.plot(x, y, "g-", label='training')
-    plt.plot(X, Y, "b-", label='validation')
-    plt.scatter(np.array(X)[d["lr"]], np.array(Y)[d["lr"]], c='b', marker='v')
-    plt.xlabel("Epochs")
-    plt.ylabel("Loss")
-    plt.legend()
-    plt.title("losses during training")
-    plt.savefig(rnd + "/plot_current.png")
-    copyfile(rnd + "/plot_current.png", rnd + "/plot_after_{}.png".format(max(x)))
-#[end] plot_losses(d)
 
 def hook(m, i, o):
     print(TERM['c'])
