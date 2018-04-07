@@ -82,9 +82,9 @@ class SmallNetwork(AbstractNetwork):
                                    nn.Linear(self._calc_fc_size(), 1024),
                                    nn.ELU(),
                                    nn.Dropout(0.5),
-                                   nn.Linear(1024, 512),
+                                   nn.Linear(1024, 1024),
                                    nn.ELU(),
-                                   nn.Linear(512, n_classes))
+                                   nn.Linear(1024, n_classes))
         self.sigma = nn.Sigmoid()
         self.init_weights()
         
