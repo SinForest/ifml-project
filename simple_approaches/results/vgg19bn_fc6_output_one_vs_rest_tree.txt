@@ -1,0 +1,4 @@
+vgg19bn_fc6
+subset accuracy: 0.006628346538242453
+hamming loss: 0.1861385603609567
+mean genres per movie: 3.0686655274196055

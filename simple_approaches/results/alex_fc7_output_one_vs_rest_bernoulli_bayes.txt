@@ -1,0 +1,4 @@
+alex_fc7
+subset accuracy: 5.178395733001916e-05
+hamming loss: 0.3319846989663472
+mean genres per movie: 8.400031070374398
