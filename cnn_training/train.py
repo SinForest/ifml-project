@@ -95,7 +95,7 @@ for m in net.modules():
         m.register_forward_hook(hook)
 """
 losses = {"train":{}, "val":{}}
-va_delay  = 3
+va_delay  = 1
 bg_proc = None
 
 # generate random new folder to store all snapshots
@@ -118,7 +118,7 @@ for epoch in tqdm(itertools.count(1), desc="epochs:"):
         pred = net(X)            # forward pass
         loss = l_fn(pred, y)     # calculate loss
         loss.backward()          # backward pass
-        opti.step(loss)          # update weights
+        opti.step()              # update weights
         
         tr_err += loss.data[0]   # log training loss
 
@@ -139,7 +139,7 @@ for epoch in tqdm(itertools.count(1), desc="epochs:"):
         #print([(X, y) for X,y in va_load][:2])
         losses["val"][epoch] = sum(va_sum) / len(va_set)
         tqdm.write("  -->{}Validating - loss: {:.5f}{}".format(TERM['g'], losses["val"][epoch], TERM['clr']))
-        sdlr.step(["val"][epoch])
+        sdlr.step(losses["val"][epoch])
         losses["lr"] = sdlr.logger
         # plot loss in BG:
         if bg_proc:
