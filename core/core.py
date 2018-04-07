@@ -25,8 +25,8 @@ class PosterSet(torch.utils.data.Dataset):
         tv_norm:   bool  - normalize images for torchvision.models
                          > if false, does not normalize
         resize:    bool  - True resizes image to (224, 224) for torchvision
-                   tuple - resizes images to (x, y)
-                   None  - resizes images to (182, 268)
+                   tuple - resizes images to (h, w)
+                   None  - resizes images to (268, 182)
         augment:   bool  - add minor random transformations to images
         debug:     bool  - use really small subset, if true
 
