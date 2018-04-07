@@ -67,7 +67,7 @@ va_load = DataLoader(va_set, batch_size=128, shuffle=False, num_workers=3, drop_
 net  = SmallNetwork(tr_set[0][0].size()[1:], len(gen_d) // 2)
 l_fn = torch.nn.BCELoss(size_average=False)
 opti = torch.optim.Adam(net.parameters())
-sdlr = ReduceLROnPlateauWithLog(opti, 'min')
+sdlr = ReduceLROnPlateauWithLog(opti, 'min', factor=0.5)
 if CUDA_ON:
     net.cuda()
 

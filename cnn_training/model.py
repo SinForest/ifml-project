@@ -52,21 +52,24 @@ class SmallNetwork(AbstractNetwork):
                                    nn.Conv2d(16, 16, kernel_size=3, stride=1, padding=1),
                                    nn.ELU(),
                                    nn.BatchNorm2d(16),
-                                   nn.MaxPool2d((2,2)))
+                                   nn.MaxPool2d((2,2)),
+                                   nn.Dropout2d(p=0.25))
         self.conv2 = nn.Sequential(nn.Conv2d(16, 16, kernel_size=3, stride=1, padding=1),
                                    nn.ELU(),
                                    nn.BatchNorm2d(16),
                                    nn.Conv2d(16, 16, kernel_size=3, stride=1, padding=1),
                                    nn.ELU(),
                                    nn.BatchNorm2d(16),
-                                   nn.MaxPool2d((2,2)))
+                                   nn.MaxPool2d((2,2)),
+                                   nn.Dropout2d(p=0.25))
         self.conv3 = nn.Sequential(nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1),
                                    nn.ELU(),
                                    nn.BatchNorm2d(32),
                                    nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1),
                                    nn.ELU(),
                                    nn.BatchNorm2d(32),
-                                   nn.MaxPool2d((2,2)))
+                                   nn.MaxPool2d((2,2)),
+                                   nn.Dropout2d(p=0.25))
         self.conv4 = nn.Sequential(nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
                                    nn.ELU(),
                                    nn.BatchNorm2d(64),

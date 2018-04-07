@@ -103,6 +103,7 @@ def plot_losses(d, folder):
     plt.plot(x, y, "g-", label='training')
     plt.plot(X, Y, "b-", label='validation')
     plt.scatter(np.array(X)[d["lr"]], np.array(Y)[d["lr"]], c='b', marker='v')
+    plt.scatter(np.array(x)[d["lr"]], np.array(y)[d["lr"]], c='g', marker='v')
     plt.xlabel("Epochs")
     plt.ylabel("Loss")
     plt.legend()
