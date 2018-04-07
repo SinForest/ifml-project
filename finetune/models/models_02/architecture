@@ -1,0 +1,11 @@
+vgg16
+
+classifier = nn.Sequential(
+                ReshapeLayer(),
+                nn.Linear(fc_size, 2048),
+                nn.RReLU(lower=0, upper=0.7, inplace=True),
+                #nn.ReLU(inplace=True),
+                nn.Linear(2048, 2048),
+                nn.ReLU(inplace=True),
+                nn.Linear(2048, num_classes),
+)
