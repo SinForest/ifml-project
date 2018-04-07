@@ -10,7 +10,6 @@ import numpy as np
 from hashlib import md5
 from tqdm import tqdm, trange
 import pickle
-import matplotlib.pyplot as plt
 from multiprocessing import Process
 import itertools
 
