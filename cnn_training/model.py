@@ -47,40 +47,40 @@ class SmallNetwork(AbstractNetwork):
         self.inp_size = inp_size # tuple!
         self.conv1 = nn.Sequential(nn.BatchNorm2d(3),
                                    nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1),
-                                   nn.PReLU(),
+                                   nn.ELU(),
                                    nn.BatchNorm2d(16),
                                    nn.Conv2d(16, 16, kernel_size=3, stride=1, padding=1),
-                                   nn.PReLU(),
+                                   nn.ELU(),
                                    nn.BatchNorm2d(16),
                                    nn.MaxPool2d((2,2)))
         self.conv2 = nn.Sequential(nn.Conv2d(16, 16, kernel_size=3, stride=1, padding=1),
-                                   nn.PReLU(),
+                                   nn.ELU(),
                                    nn.BatchNorm2d(16),
                                    nn.Conv2d(16, 16, kernel_size=3, stride=1, padding=1),
-                                   nn.PReLU(),
+                                   nn.ELU(),
                                    nn.BatchNorm2d(16),
                                    nn.MaxPool2d((2,2)))
         self.conv3 = nn.Sequential(nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1),
-                                   nn.PReLU(),
+                                   nn.ELU(),
                                    nn.BatchNorm2d(32),
                                    nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1),
-                                   nn.PReLU(),
+                                   nn.ELU(),
                                    nn.BatchNorm2d(32),
                                    nn.MaxPool2d((2,2)))
         self.conv4 = nn.Sequential(nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
-                                   nn.PReLU(),
+                                   nn.ELU(),
                                    nn.BatchNorm2d(64),
                                    nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
-                                   nn.PReLU(),
+                                   nn.ELU(),
                                    nn.BatchNorm2d(64),
                                    nn.MaxPool2d((2,2)))
         self.conv  = nn.Sequential(self.conv1, self.conv2, self.conv3, self.conv4)
         self.f_con = nn.Sequential(nn.Dropout(0.5),
                                    nn.Linear(self._calc_fc_size(), 1024),
-                                   nn.PReLU(),
+                                   nn.ELU(),
                                    nn.Dropout(0.5),
                                    nn.Linear(1024, 512),
-                                   nn.PReLU(),
+                                   nn.ELU(),
                                    nn.Linear(512, n_classes))
         self.sigma = nn.Sigmoid()
         self.init_weights()
