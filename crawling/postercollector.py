@@ -17,6 +17,7 @@ from multiprocessing import Pool
 from tqdm import tqdm
 from functools import partial
 
+errors = 0
 pool = None
 headers = {
     'headers': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'}
@@ -43,7 +44,8 @@ def main():
         download_movie_list_multiprocess(inputs)
     elif mode == 'download':
         download_movie_posters_multiprocess()
-
+    
+    print('errors:' + str(errors))
 
 def make_pool(processes):
     global pool
@@ -51,6 +53,7 @@ def make_pool(processes):
 
 def scrape_from_imdb_id(id):
     #The actual query
+    global errors
     url = "https://www.imdb.com/title/" + id
     title = '-'
     genres = []
@@ -61,6 +64,7 @@ def scrape_from_imdb_id(id):
         url = url.rstrip('\n')
         r = requests.get(url, headers=headers, timeout = timeout_param)
         if r.status_code != 200:
+            count_error()
             return None
 
         html = r.text
@@ -86,7 +90,7 @@ def scrape_from_imdb_id(id):
         else:
             return None
     except Exception as ex:
-        pass
+        count_error()
     
 def handle_user_input():
     inputs = sys.argv[1:]
@@ -166,7 +170,9 @@ def download_movie_list_multiprocess(ids):
     clean_ids = list(set(ids) - set(existing_ids))
     
     for movie in tqdm(pool.imap(scrape_from_imdb_id, clean_ids)):
-        if not movie is None:
+        if movie is None:
+            count_error()
+        else:
             movies.append(movie)
             autosave_counter += 1
             if (autosave_counter == autosave_interval):
@@ -200,7 +206,8 @@ def download_movie_posters_multiprocess():
     if not os.path.exists('posters'):
         os.makedirs('posters')
     for success in tqdm(pool.imap(download_poster, movies)):
-        pass
+        if not success:
+            count_error()
             
 def download_poster(movie):
     filename = 'posters/' + movie['imdb-id'] + ".jpg"
@@ -280,6 +287,8 @@ def movies_by_genre_multiprocess(genre, pages):
     for page_ids in tqdm(pool.imap(func, pages)):
         if page_ids:
             ids.extend(page_ids)
+        else:
+            count_error()
     return ids
 
 def ids_by_page(genre, page):
@@ -317,6 +326,10 @@ def read_movies():
             return pickle.load(fp)
     else:
         return []
+
+def count_error():
+    global errors
+    errors+=1
 
 def help():
     print('How to use the postercollector:')
