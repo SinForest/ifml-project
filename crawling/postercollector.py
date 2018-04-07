@@ -13,6 +13,10 @@ import pickle
 import os
 from urllib.request import urlopen
 from random import randint
+from multiprocessing import Pool
+from tqdm import tqdm
+from functools import partial
+
 
 headers = {
     'headers': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'}
@@ -29,12 +33,12 @@ autosave_interval = 20
 def main():
     mode, inputs = handle_user_input()
     if mode == 'all':
-        download_movie_list(inputs)
-        download_movie_posters()        
+        download_movie_list_multiprocess(inputs)
+        download_movie_posters_multiprocess()        
     elif mode == 'list':
-        download_movie_list(inputs)
+        download_movie_list_multiprocess(inputs)
     elif mode == 'download':
-        download_movie_posters()
+        download_movie_posters_multiprocess()
 
 
 
@@ -49,7 +53,6 @@ def scrape_from_imdb_id(id):
 
     try:
         url = url.rstrip('\n')
-        print('Processing..' + url)
         r = requests.get(url, headers=headers, timeout = timeout_param)
         if r.status_code != 200:
             return None
@@ -77,7 +80,7 @@ def scrape_from_imdb_id(id):
         else:
             return None
     except Exception as ex:
-        print(str(ex))
+        pass
     
 def handle_user_input():
     inputs = sys.argv[1:]
@@ -102,9 +105,9 @@ def handle_user_input():
             if user_genre == 'all':
                 for genre in genres:
                     print('getting ids for ' + genre)
-                    inputs.extend(movies_by_genre(genre, pages))
+                    inputs.extend(movies_by_genre_multiprocess(genre, pages))
             else:
-                inputs.extend(movies_by_genre(user_genre, pages))
+                inputs.extend(movies_by_genre_multiprocess(user_genre, pages))
             mode = 'list'
         elif inputs[0] == 'all':
             inputs = inputs[1:]
@@ -141,6 +144,26 @@ def download_movie_list(ids):
             print(id + ' already exists')
     write_movies(movies)
     
+def download_movie_list_multiprocess(ids):
+    print('downloading movie list')
+    pool = Pool()
+    movies = read_movies()
+    existing_ids = []
+    autosave_counter = 0
+    for movie in movies:
+        existing_ids.append(movie['imdb-id'])
+    
+    clean_ids = list(set(ids) - set(existing_ids))
+    
+    for movie in tqdm(pool.imap(scrape_from_imdb_id, clean_ids)):
+        if not movie is None:
+            movies.append(movie)
+            autosave_counter += 1
+            if (autosave_counter == autosave_interval):
+                autosave_counter = 0
+                write_movies(movies)
+    write_movies(movies)
+    
 def download_movie_posters():
     movies = read_movies()
     if not os.path.exists('posters'):
@@ -159,6 +182,26 @@ def download_movie_posters():
             
         else:
             print('Poster for ' + movie['title'] + ' already exists')
+
+def download_movie_posters_multiprocess():
+    print('downloading posters')
+    pool = Pool()
+    movies = read_movies()
+    if not os.path.exists('posters'):
+        os.makedirs('posters')
+    for success in tqdm(pool.imap(download_poster, movies)):
+        pass
+            
+def download_poster(movie):
+    filename = 'posters/' + movie['imdb-id'] + ".jpg"
+    if not os.path.exists(filename):
+        try:   
+            request = urlopen(movie['poster'], timeout = timeout_param)
+            with open(filename, 'wb') as f:
+                f.write(request.read())
+                return True            
+        except Exception as ex:
+            return False
 
 def random_ids(num):
     num = int(num)
@@ -220,15 +263,47 @@ def movies_by_genre(genre, pages):
         
     return ids
 
+def movies_by_genre_multiprocess(genre, pages):
+    pool = Pool()
+    ids=[]
+    pages = list(range(1,pages+1))
+    func = partial(ids_by_page, genre)
+    for page_ids in tqdm(pool.imap(func, pages)):
+        ids.extend(page_ids)
+    return ids
+
+def ids_by_page(genre, page):
+    ids = []
+    try:   
+        base_url = 'http://www.imdb.com'
+        url = base_url + '/search/title?genres=' + genre + '&page=' + str(page)
+        r = requests.get(url, headers=headers, timeout = timeout_param)
+        html = None
+        if r.status_code != 200:
+            return None
+        html = r.text
+        soup = BeautifulSoup(html, 'lxml')
+        titles = soup.select('.lister-item-header a')
+        if titles is not None:
+            for title in titles:
+                id = title['href']
+                id = id[7:16]
+                ids.append(id)
+        else:
+            pass
+    except Exception as ex:
+        pass
+    
+    return ids
+
 def write_movies(movies):
     with open('movielist', 'wb') as fp:
         pickle.dump(movies, fp)
-        print('movies written to file')
+        
         
 def read_movies():
     if os.path.exists('movielist'):
         with open ('movielist', 'rb') as fp:
-            print('movielist loaded')
             return pickle.load(fp)
     else:
         return []
