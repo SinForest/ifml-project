@@ -276,7 +276,8 @@ def movies_by_genre_multiprocess(genre, pages):
     pages = list(range(1,pages+1))
     func = partial(ids_by_page, genre)
     for page_ids in tqdm(pool.imap(func, pages)):
-        ids.extend(page_ids)
+        if page_ids:
+            ids.extend(page_ids)
     return ids
 
 def ids_by_page(genre, page):
