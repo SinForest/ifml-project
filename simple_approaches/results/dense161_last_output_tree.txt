@@ -1,0 +1,4 @@
+dense161_last
+subset accuracy: 0.01418880430842525
+hamming loss: 0.17899912867863102
+mean genres per movie: 2.7743772979131065

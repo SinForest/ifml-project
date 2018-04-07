@@ -5,10 +5,11 @@ Created on Thu Apr  5 11:09:03 2018
 
 @author: twuensche
 """
-from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import hamming_loss
 import pickle
 import os
+import numpy as np
 
 
 import h5py
@@ -23,7 +24,6 @@ feature_sets = ['alex_fc6', 'alex_fc7', 'vgg19bn_fc6', 'vgg19bn_fc6', \
 
 def load_movie_data(feature_set):
     
-    print('load data..')
     
     h5 = h5py.File(filename,'r')
     
@@ -39,33 +39,35 @@ def load_movie_data(feature_set):
     Y_test = labels[test_idx]
     
 
-    print('data loaded')
     return X_train, X_test, Y_train, Y_test
 
-def help():
-    print('How to use the kneighbours script:')
-    print('TODO')
+
     
 def write_model(trained_classifier, name):
-    with open(name, 'wb') as fp:
+    with open('models/' + name, 'wb') as fp:
         pickle.dump(trained_classifier, fp)
-        print('model written to file')
 
 def read_model(name):
     if os.path.exists(name):
         with open (name, 'rb') as fp:
-            print('trained_classifier loaded')
             return pickle.load(fp)
     else:
         return []
 
 def output_to_file(data_set, filename, expected, prediction):
-    text_file = open(filename, "w")
+    text_file = open('results/' + filename, "w")
     
+    mean_genres_per_movie = np.mean(np.sum(prediction, axis = 1))
     accuracy = accuracy_score(expected, prediction)
-    report = classification_report(expected, prediction)
+    hamming = hamming_loss(expected, prediction)
     text_file.write(data_set)
-    text_file.write(accuracy)
-    text_file.write(report)
+    text_file.write('\n')
+    text_file.write('subset accuracy: ' + str(accuracy))
+    text_file.write('\n')
+    text_file.write('hamming loss: ' + str(hamming))
+    text_file.write('\n')
+    text_file.write('mean genres per movie: ' + str(mean_genres_per_movie))
+
     
     text_file.close()
+    
