@@ -4,6 +4,8 @@ from tqdm import tqdm
 import torchvision
 import torchvision.transforms as trans
 import torch
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from shutil import copyfile
 
@@ -56,7 +58,7 @@ class PosterSet(torch.utils.data.Dataset):
         elif type(resize) == tuple and len(resize) == 2:
             scale = [trans.Resize(resize)]
         elif resize is None:
-            scale = [trans.Resize((182, 268))]
+            scale = [trans.Resize((268, 182))]
         else:
             raise RuntimeError("resize needs to be bool or 2-tuple")
 
