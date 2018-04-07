@@ -17,8 +17,7 @@ from multiprocessing import Pool
 from tqdm import tqdm
 from functools import partial
 
-processes = None
-
+pool = None
 headers = {
     'headers': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'}
 test_ids = ['tt0438097', 'tt0096895', 'tt0111161', 'tt0167260', 'tt0068646',\
@@ -29,10 +28,14 @@ genres = ['action', 'adventure', 'animation', 'biography', 'comedy', 'crime',\
           'horror', 'music', 'musical', 'mystery', 'romance', 'sci-fi',\
           'short', 'sport', 'superhero', 'thriller', 'war', 'western']
 timeout_param = 3
-autosave_interval = 20
+autosave_interval = 1000
 
 def main():
+    
     mode, inputs = handle_user_input()
+    if pool is None:
+        make_pool(None)
+        
     if mode == 'all':
         download_movie_list_multiprocess(inputs)
         download_movie_posters_multiprocess()        
@@ -42,7 +45,9 @@ def main():
         download_movie_posters_multiprocess()
 
 
-
+def make_pool(processes):
+    global pool
+    pool = Pool(processes)
 
 def scrape_from_imdb_id(id):
     #The actual query
@@ -86,6 +91,7 @@ def scrape_from_imdb_id(id):
 def handle_user_input():
     inputs = sys.argv[1:]
     mode = ''
+
     if len(inputs) > 0:
         if inputs[0] == 'test':
             inputs = test_ids
@@ -103,8 +109,7 @@ def handle_user_input():
             user_genre = inputs[1]
             pages = int(inputs[2])        
             if len(inputs) > 3:
-                global processes
-                processes = int(inputs[3])
+                make_pool(int(inputs[3]))
             inputs = []
             if user_genre == 'all':
                 for genre in genres:
@@ -121,8 +126,7 @@ def handle_user_input():
             mode = 'list'
         elif inputs[0] == 'download':
             if len(inputs) > 1:
-                global processes
-                processes = int(inputs[1])
+                make_pool(int(inputs[1]))
             inputs = inputs[2:]
             mode = 'download'
     else:
@@ -153,7 +157,6 @@ def download_movie_list(ids):
     
 def download_movie_list_multiprocess(ids):
     print('downloading movie list')
-    pool = Pool(processes)
     movies = read_movies()
     existing_ids = []
     autosave_counter = 0
@@ -169,6 +172,7 @@ def download_movie_list_multiprocess(ids):
             if (autosave_counter == autosave_interval):
                 autosave_counter = 0
                 write_movies(movies)
+                tqdm.write(str(len(movies)))
     write_movies(movies)
     
 def download_movie_posters():
@@ -192,7 +196,6 @@ def download_movie_posters():
 
 def download_movie_posters_multiprocess():
     print('downloading posters')
-    pool = Pool(processes)
     movies = read_movies()
     if not os.path.exists('posters'):
         os.makedirs('posters')
@@ -271,7 +274,6 @@ def movies_by_genre(genre, pages):
     return ids
 
 def movies_by_genre_multiprocess(genre, pages):
-    pool = Pool(processes)
     ids=[]
     pages = list(range(1,pages+1))
     func = partial(ids_by_page, genre)
