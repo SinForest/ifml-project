@@ -79,7 +79,7 @@ Thorsten Wünsche (3148266)
 \end_layout
 
 \begin_layout Section
-Comparison of methods and featuresets
+Comparison of methods and feature sets
 \end_layout
 
 \begin_layout Standard
@@ -144,7 +144,7 @@ name "sub:Metrics"
 We use three different metrics to evaluate the performance of the chosen
  machine learning methods on the feature sets.
  Common metrics, such as precision, recall or F1 score don't apply well
- to our problem, as assingning genres to movies is a multilabel classification
+ to our problem, as assigning genres to movies is a multi-label classification
  problem, since each movie can have more than one genre.
 \end_layout
 
@@ -224,7 +224,7 @@ name "sub:Comparing-non-neural"
 \end_layout
 
 \begin_layout Standard
-In this section we evaluatet the scikit-learn implementations of our chosen
+In this section we evaluate the scikit-learn implementations of our chosen
  machine learning methods on the six feature sets with regard to the three
  metrics introduced in section 
 \begin_inset CommandInset ref
@@ -234,7 +234,7 @@ reference "sub:Metrics"
 \end_inset
 
 .
- Most approaches to not support multilabel classification by default, therefore
+ Most approaches to not support multi-label classification by default, therefore
  the 
 \begin_inset CommandInset href
 LatexCommand href
@@ -244,7 +244,7 @@ target "http://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OneV
 \end_inset
 
  was used to train one classifier for each genre.
- In the case, that multilabel classification is supported, both the native
+ In the case, that multi-label classification is supported, both the native
  support and the combination with 
 \begin_inset CommandInset href
 LatexCommand href
@@ -408,8 +408,8 @@ superhero
 \begin_inset Quotes erd
 \end_inset
 
- genre, this genre was dropped during the creaton of the feature sets.
- Movies, that belongt exclusively to this genre now have no genres at all,
+ genre, this genre was dropped during the creation of the feature sets.
+ Movies, that belong exclusively to this genre now have no genres at all,
  therefore this naive prediction does not have a subset accuracy of 
 \begin_inset Formula $0\%$
 \end_inset
@@ -1815,7 +1815,7 @@ name "tab:one-vs-rest-Naive-Bayes-Gauss"
 
 \begin_layout Standard
 Naive Bayes has the potential to perform relatively well on high dimensional
- data sets, as considering each dimension seperately reduces the need for
+ data sets, as considering each dimension separately reduces the need for
  extremely high numbers of training samples.
  The performance of both implementation on this problem however is very
  poor.
@@ -1860,7 +1860,7 @@ target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.Gau
 
 \end_inset
 
- suggests, that our data may not be well suited to models, that assume gaussian
+ suggests, that our data may not be well suited to models, that assume Gaussian
  clusters.
  This combined with the relatively long runtime of 
 \begin_inset CommandInset href
@@ -2032,7 +2032,7 @@ name "tab:one-vs-rest-Quadratic-Discrimina"
 \end_layout
 
 \begin_layout Standard
-While it outperformes 
+While it outperforms 
 \begin_inset CommandInset href
 LatexCommand href
 name "GaussianNB"
@@ -2042,7 +2042,7 @@ target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.Gau
 
 , the results are still among the worst out of all our experiments.
  This reinforces the theory, that this data does not lend itself well to
- gaussian models.
+ Gaussian models.
  
 \end_layout
 
@@ -2070,7 +2070,7 @@ target "http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeig
 
 \end_inset
 
- supports multilabel classification by defaut.
+ supports multi-label classification by default.
  Regrettably it takes a significant amount of time to make predictions even
  though training can be done very quickly.
  This is due to the rather large number of training samples used, which
@@ -2838,6 +2838,32 @@ name "sub:Decision-Tree"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset CommandInset href
+LatexCommand href
+name "DecisionTreeClasifier"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html"
+
+\end_inset
+
+ supports multi-label classification by default, and by limiting the depth
+ of the tree, training and prediction duration can be closely manipulated,
+ making them suitable to compare the inherent multi-label support to using
+ the 
+\begin_inset CommandInset href
+LatexCommand href
+name "OneVsRestClassifier"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OneVsRestClassifier.html"
+
+\end_inset
+
+.
+ The lone decision tree uses a maximum depth of 100 layers, the combination
+ of single label trees use 50 layers to keep increase in training time in
+ check.
 \end_layout
 
 \begin_layout Standard
@@ -4190,6 +4216,31 @@ name "tab:one-vs-rest-Decision-Tree"
 
 \end_layout
 
+\begin_layout Standard
+The single decision tree is clearly superior to the 
+\begin_inset CommandInset href
+LatexCommand href
+name "OneVsRestClassifier"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OneVsRestClassifier.html"
+
+\end_inset
+
+ version in all three metrics.
+\end_layout
+
+\begin_layout Standard
+Even the single Decision Tree does not excel in terms of its accuracy.
+ It is noteworthy however, that it sticks very closely to the expected number
+ of genres/movie across all feature sets.
+ This is likely due to its nature of using genre combinations taken from
+ movies as a whole, rather than regarding each genre separately.
+\end_layout
+
+\begin_layout Standard
+Furthermore, the Decision Tree seems to work relatively well with the alex_fc7
+ data set, which most other methods score very low with.
+\end_layout
+
 \begin_layout Subsubsection
 Random Forest
 \begin_inset CommandInset label
@@ -4199,6 +4250,36 @@ name "sub:Random-Forest"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset CommandInset href
+LatexCommand href
+name "RandomForestClassifier"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html"
+
+\end_inset
+
+ is closely related to the 
+\begin_inset CommandInset href
+LatexCommand href
+name "DecisionTreeClasifier"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html"
+
+\end_inset
+
+.
+ Once again we get a chance to compare a single forest to a group of forests
+ held together by the 
+\begin_inset CommandInset href
+LatexCommand href
+name "OneVsRestClassifier"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OneVsRestClassifier.html"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -5551,6 +5632,35 @@ name "tab:one-vs-rest-Random-Forest"
 
 \end_layout
 
+\begin_layout Standard
+As opposed to the Decision Trees, the Random Forest works better with the
+ 
+\begin_inset CommandInset href
+LatexCommand href
+name "OneVsRestClassifier"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OneVsRestClassifier.html"
+
+\end_inset
+
+.
+ This, as well as the overall worse performance would suggest, that the
+ amount of training data was simply not sufficient to take advantage of
+ the Random Forest, especially in the stand alone version with its many
+ possible outcomes.
+\end_layout
+
+\begin_layout Standard
+The voting between the different trees is likely responsible for the significant
+ly lower mean genres/movie score.
+ 
+\end_layout
+
+\begin_layout Standard
+In this state, this method is of no real use.
+ It does offer a clear perspective for improvement though, as obtaining
+ more training data is not too difficult.
+\end_layout
+
 \begin_layout Subsubsection
 Support Vector Machine
 \begin_inset CommandInset label
@@ -5560,6 +5670,48 @@ name "sub:Support-Vector-Machine"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+The Support Vector Machine is the only method in our selection, which attempts
+ to fit a hyperplane to the dataset.
+ Several hyperplanes to be exact, as multi-label classification is not supported.
+ Therefore the 
+\begin_inset CommandInset href
+LatexCommand href
+name "OneVsRestClassifier"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OneVsRestClassifier.html"
+
+\end_inset
+
+ is once again required.
+\end_layout
+
+\begin_layout Standard
+We tested two different implementations.
+ 
+\begin_inset CommandInset href
+LatexCommand href
+name "SVC"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC"
+
+\end_inset
+
+ does not scale well with large data sets, which lead to training taking
+ over eight hours on a single feature set, at which point this implementation
+ was abandoned.
+\end_layout
+
+\begin_layout Standard
+Instead we used 
+\begin_inset CommandInset href
+LatexCommand href
+name "LinearSVC"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html#sklearn.svm.LinearSVC"
+
+\end_inset
+
+, which is intended to work with even more training data.
 \end_layout
 
 \begin_layout Standard
@@ -6237,6 +6389,39 @@ name "tab:one-vs-rest-Support-Vector"
 
 \end_layout
 
+\begin_layout Standard
+The results are a mixed bag.
+ The mean genres/movie vary a lot, but are in the right area, making the
+ SVM second only to the decision tree regarding this metric.
+\end_layout
+
+\begin_layout Standard
+Accuracy varies a lot as well, with the dense161_last feature set emerging
+ as the clear favorite.
+\end_layout
+
+\begin_layout Standard
+The performance overall is does not excel at any particular area, though
+ the overall performance is relatively solid.
+ There may be room for improvement by either providing 
+\begin_inset CommandInset href
+LatexCommand href
+name "SVC"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC"
+
+\end_inset
+
+ with more time, or 
+\begin_inset CommandInset href
+LatexCommand href
+name "LinearSVC"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html#sklearn.svm.LinearSVC"
+
+\end_inset
+
+ with more training data and more iterations.
+\end_layout
+
 \begin_layout Subsection
 Comparing feature sets
 \begin_inset CommandInset label
@@ -6246,6 +6431,18 @@ name "sub:Comparing-feature-sets"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Using the metrics presented in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Comparing-non-neural"
+
+\end_inset
+
+, we attempt to find the most useful among our feature sets.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -7302,6 +7499,38 @@ name "tab:Standard-Deviation-values"
 
 \end_layout
 
+\begin_layout Standard
+The overall best accuracy was achieved with dense161_last, followed closely
+ by res50_avg, which has a slight lead when it comes to mean genres/movie.
+ The Standard Deviation of both feature sets is relatively low as well,
+ making both solid choices for further experiments.
+\end_layout
+
+\begin_layout Standard
+The features extracted by AlexNet were outperformed ob almost all approaches,
+ the only exception being the Decision Tree.
+ Therefore, they should not be used to train other methods for this task.
+\end_layout
+
+\begin_layout Standard
+VGG19 with batchnorm was all right, but did not shine on any method in particula
+r.
+ For this task there seems to be no reason to pick these feature sets over
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+dense161_last or res50_avg.
+\end_layout
+
 \begin_layout Subsection
 Conclusion
 \begin_inset CommandInset label
@@ -7311,6 +7540,44 @@ name "sub:Conclusion"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+None of the methods tested here were able to deliver reliable results.
+ Only K-Nearest Neighbors was able to achieve a Subset Accuracy of over
+ 
+\begin_inset Formula $3\%$
+\end_inset
+
+, and the Random Forest was the only method to surpass our naive guess (no
+ genres for all movies) in terms of the Hamming Loss.
+ Therefore we conclude, that we were unable to assign genres to movies based
+ on their poster reliably by using non neural network methods with features
+ selected by neural networks.
+\end_layout
+
+\begin_layout Standard
+If we were to continue with one of these methods however, the best candidates
+ would likely be the Random Forest with a significant increase in training
+ data.
+ This is due to the solid performance of the Decision Tree and the signs,
+ that the Random Forest was suffering from a lack of data to distribute
+ across its individual trees.
+ The most promising feature set would probably be alex_fc7, again based
+ on the results of the Decision Tree.
+\end_layout
+
+\begin_layout Standard
+Another option would be using Support Vector Machines in a OneVsRestClassifier
+ with dense161_last, as there seems to be more room to grow if given more
+ time and possibly training data.
+\end_layout
+
+\begin_layout Standard
+The K-Nearest Neighbor classifier may have achieved the highest accuracy
+ in this test, but its predictions already take a long time, and more training
+ data would only serve to worsen the situation.
+ This makes it an unsuitable candidate for further development.
 \end_layout
 
 \end_body
