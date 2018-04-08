@@ -16,7 +16,7 @@ import h5py
 
 filename = "../sets/features_all.h5"
 n_neighbors = 5
-feature_sets = ['alex_fc6', 'alex_fc7', 'vgg19bn_fc6', 'vgg19bn_fc6', \
+feature_sets = ['alex_fc6', 'alex_fc7', 'vgg19bn_fc6', \
                 'vgg19bn_fc7', 'res50_avg', 'dense161_last']
 
 
