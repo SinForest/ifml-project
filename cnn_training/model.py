@@ -136,7 +136,7 @@ class MidrangeNetwork(AbstractNetwork):
         self.conv1 = nn.Sequential(nn.BatchNorm2d(3),
                                    nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1),
                                    nn.ELU(),
-                                   nn.BatchNorm2d(16),
+                                   nn.BatchNorm2d(32),
                                    nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1),
                                    nn.ELU(),
                                    nn.BatchNorm2d(32),
