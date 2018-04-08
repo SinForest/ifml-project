@@ -1,0 +1,4 @@
+res50_avg
+subset accuracy: 0.03153643001398167
+hamming loss: 0.12043147293837934
+mean genres per movie: 1.2592304903940759
