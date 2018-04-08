@@ -13,7 +13,7 @@ import pickle
 from multiprocessing import Process
 import itertools
 
-from model import SmallNetwork, DebugNetwork, SmallerNetwork
+from model import SmallNetwork, DebugNetwork, SmallerNetwork, MidrangeNetwork
 from core import PosterSet, plot_losses
 
 DATASET_PATH    = "../sets/set_splits.p"
@@ -64,10 +64,10 @@ va_set = PosterSet(POSTER_PATH, split, 'val',  gen_d=gen_d, augment=False, resiz
 va_load = DataLoader(va_set, batch_size=128, shuffle=False, num_workers=3, drop_last=True)
 
 # prepare model and training utillity
-net  = SmallNetwork(tr_set[0][0].size()[1:], len(gen_d) // 2)
+net  = MidrangeNetwork(tr_set[0][0].size()[1:], len(gen_d) // 2)
 l_fn = torch.nn.BCELoss(size_average=False)
 opti = torch.optim.Adam(net.parameters())
-sdlr = ReduceLROnPlateauWithLog(opti, 'min', factor=0.5)
+sdlr = ReduceLROnPlateauWithLog(opti, 'min', factor=0.8, patience=12, cooldown=8)
 if CUDA_ON:
     net.cuda()
 
