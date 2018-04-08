@@ -21,6 +21,7 @@ POSTER_PATH     = "../posters/"
 GENRE_DICT_PATH = "../sets/gen_d.p"
 
 CUDA_ON = True
+CROP_SIZE = (160, 160)
 
 # dict for terminal colors
 TERM = {'y'  : "\33[33m",
@@ -56,14 +57,14 @@ def hook(m, i, o):
 gen_d = pickle.load(open(GENRE_DICT_PATH, 'rb'))
 split = pickle.load(open(DATASET_PATH, 'rb'))
 
-tr_set = PosterSet(POSTER_PATH, split, 'train', gen_d=gen_d, augment=True, resize=None)# debug=True)
+tr_set = PosterSet(POSTER_PATH, split, 'train', gen_d=gen_d, augment=True, resize=None, rnd_crop=CROP_SIZE)#, debug=True)
 tr_load = DataLoader(tr_set, batch_size=256, shuffle=True, num_workers=3, drop_last=True)
 
-va_set = PosterSet(POSTER_PATH, split, 'val', gen_d=gen_d, augment=False, resize=None)# debug=True)
-va_load = DataLoader(va_set, batch_size=256, shuffle=False, num_workers=3, drop_last=True)
+va_set = PosterSet(POSTER_PATH, split, 'val',  gen_d=gen_d, augment=False, resize=None, ten_crop=CROP_SIZE)#, debug=True)
+va_load = DataLoader(va_set, batch_size=128, shuffle=False, num_workers=3, drop_last=True)
 
 # prepare model and training utillity
-net  = SmallerNetwork(tr_set[0][0].size()[1:], len(gen_d) // 2)
+net  = SmallNetwork(tr_set[0][0].size()[1:], len(gen_d) // 2)
 l_fn = torch.nn.BCELoss(size_average=False)
 opti = torch.optim.Adam(net.parameters())
 sdlr = ReduceLROnPlateauWithLog(opti, 'min', factor=0.5)
@@ -112,14 +113,18 @@ for epoch in tqdm(itertools.count(1), desc="epochs:"):
 
     if epoch % va_delay == 0:  # validate and save every <va_delay>th epoch
         net.eval() # puts model into 'eval' mode (some layers behave differently)
-        if CUDA_ON:
-            va_sum = [l_fn(net(Var(X, volatile=True).cuda()), Var(y).cuda()).data[0] for X,y in tqdm(va_load, desc="valid:")] # val forward passes (GPU)
-            # print([net(Var(X, volatile=True).cuda()).data for X,y in va_load])
-        else:
-            va_sum = [l_fn(net(Var(X, volatile=True)), Var(y)).data[0] for X,y in tqdm(va_load, desc="valid:")] # val forward passes (CPU)
-            # print([net(Var(X, volatile=True)).data for X,y in va_load])
+        va_sum = []
+        for X ,y in tqdm(va_load, desc="valid:"):
+            bs, ncrops, c, h, w = X.size()
+            if CUDA_ON:
+                X, y = Var(X, volatile=True).cuda(), Var(y).cuda()
+            else:
+                X, y = Var(X, volatile=True), Var(y)
+            
+            result = net(X.view(-1, c, h, w))      # put crops into model as single instances
+            result = result.view(bs, ncrops, -1).mean(1) # calc average score over all crops of same image
+            va_sum.append(l_fn(result, y).data[0])
         
-        #print([(X, y) for X,y in va_load][:2])
         losses["val"][epoch] = sum(va_sum) / len(va_set)
         tqdm.write("  -->{}Validating - loss: {:.5f}{}".format(TERM['g'], losses["val"][epoch], TERM['clr']))
         sdlr.step(losses["val"][epoch])

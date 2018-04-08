@@ -14,7 +14,8 @@ class PosterSet(torch.utils.data.Dataset):
         im = Image.open(self.path + fname + ".jpg").convert("RGB")
         return im
 
-    def __init__(self, path, data, setname, gen_d=None, tv_norm=False, resize=False, augment=False, debug=False):
+    def __init__(self, path, data, setname, gen_d=None, tv_norm=False, resize=False,
+                 augment=False, rnd_crop=None, ten_crop=None, debug=False):
         """
         @args:
         path:      str   - path of the dataset images
@@ -29,12 +30,13 @@ class PosterSet(torch.utils.data.Dataset):
                    None  - resizes images to (268, 182)
         augment:   bool  - add minor random transformations to images
         debug:     bool  - use really small subset, if true
-
+        rnd_crop:  tuple - crop randomly with size (h, w) ->use for train
+        ten_crop:  tuple - deterministic crop with size (h, w) ->use for val/test
         """
         self.path = path
         if setname == 'all':
             data['all'] = {}
-            data['all']['ids'] = data['train']['ids'] + data['val']['ids'] + data['test']['ids']
+            data['all']['ids']    = data['train']['ids']    + data['val']['ids']    + data['test']['ids']
             data['all']['labels'] = data['train']['labels'] + data['val']['labels'] + data['test']['labels']
         if debug:
             data[setname]['ids'] = data[setname]['ids'][:65]
@@ -52,29 +54,45 @@ class PosterSet(torch.utils.data.Dataset):
         self.ids = data[setname]['ids']
 
         if resize == True:
-            scale = [trans.Resize((224, 224))]
+            scale = trans.Resize((224, 224))
         elif resize == False:
-            scale = []
+            scale = torchvision.transforms.Compose([])
         elif type(resize) == tuple and len(resize) == 2:
-            scale = [trans.Resize(resize)]
+            scale = trans.Resize(resize)
         elif resize is None:
-            scale = [trans.Resize((268, 182))]
+            scale = trans.Resize((268, 182))
         else:
             raise RuntimeError("resize needs to be bool or 2-tuple")
 
-        to_ten = trans.ToTensor()
+        
         self.mean = [0.485, 0.456, 0.406] if tv_norm else [0., 0., 0.]
         self.std  = [0.229, 0.224, 0.225] if tv_norm else [1., 1., 1.]
         norm = trans.Normalize(mean=self.mean, std=self.std)
-        
+
+        to_ten = trans.ToTensor()
+
         if augment:
-            augmentation = [trans.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.03),
-                            trans.RandomHorizontalFlip(),
-                            trans.RandomRotation(5, resample=Image.BILINEAR)]
+            augmentation = torchvision.transforms.Compose([trans.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.03),
+                                                           trans.RandomHorizontalFlip(),trans.RandomRotation(5, resample=Image.BILINEAR)])
         else:
-            augmentation = [] #TODO!
+            augmentation = torchvision.transforms.Compose([]) #TODO!
         
-        self.preproc = torchvision.transforms.Compose(scale + augmentation + [to_ten, norm])
+
+        if rnd_crop and ten_crop:
+            raise RuntimeError("Can only use one crop type.")
+        elif type(rnd_crop) == tuple and len(rnd_crop) == 2:
+            rc = torchvision.transforms.RandomCrop(rnd_crop)
+            self.preproc = torchvision.transforms.Compose([scale, augmentation, rc, to_ten, norm])
+            print("using rnd_crop") #DEBUG!
+        elif type(ten_crop) == tuple and len(ten_crop) == 2:
+            tc = torchvision.transforms.TenCrop(ten_crop)
+            self.preproc = lambda img: torch.stack([norm(to_ten(x)) for x in tc(augmentation(scale(img)))], 0)
+            print("using ten_crop") #DEBUG!
+        elif rnd_crop is None and ten_crop is None:
+            self.preproc = torchvision.transforms.Compose([scale, augmentation, to_ten, norm])
+        else:
+            RuntimeError("Wrong parameters for ten_crop or rnd_crop.")
+
 
     def __getitem__(self, index):
         return self.preproc(self.load1(self.X[index])), self.frac_hot(self.y[index])
@@ -89,21 +107,24 @@ class PosterSet(torch.utils.data.Dataset):
         a[y] = 1
         return torch.Tensor(a)
 
-def plot_losses(d, folder):
+def plot_losses(d, folder, shift=True):
     """
     @args:
     d:       dict - ["train"]: dict - {epoch: loss, ...}
                     ["val"]:   dict - {epoch: loss, ...}
                     ["lr"]:    list - [<epoch, when lr reduced>, ...]
     folder:  str  - folder to store plots in
+    shift:   bool - shifts train and val by 0.5, since validation happens after training
     """
-    x, y = zip(*d["train"].items())
-    X, Y = zip(*d["val"].items())
+    x, y    = zip(*d["train"].items())
+    X, Y    = zip(*d["val"].items())
+    x       = np.array(x) - 0.5 if shift else 0
+    y, X, Y = np.array(y), np.array(X), np.array(Y)
     plt.clf()
     plt.plot(x, y, "g-", label='training')
     plt.plot(X, Y, "b-", label='validation')
-    plt.scatter(np.array(X)[d["lr"]], np.array(Y)[d["lr"]], c='b', marker='v')
-    plt.scatter(np.array(x)[d["lr"]], np.array(y)[d["lr"]], c='g', marker='v')
+    plt.scatter(x[d["lr"]], y[d["lr"]], c='g', marker='v') #train
+    plt.scatter(X[d["lr"]], Y[d["lr"]], c='b', marker='v') #val
     plt.xlabel("Epochs")
     plt.ylabel("Loss")
     plt.legend()

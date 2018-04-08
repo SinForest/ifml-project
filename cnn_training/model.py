@@ -9,7 +9,11 @@ from functools import reduce
 import operator
 
 class AbstractNetwork(nn.Module):
+    def __init__(self):
+        super().__init__()
+
     def _calc_fc_size(self):
+        print("Initializing model with", self.inp_size) #DEBUG!
         tmp = Var(Ten(1, 3, *self.inp_size))
         return reduce(operator.mul, self.conv(tmp).size())
     
@@ -79,7 +83,7 @@ class SmallerNetwork(AbstractNetwork):
 class SmallNetwork(AbstractNetwork):
 
     def __init__(self, inp_size, n_classes):
-        super(SmallNetwork, self).__init__() # inp-size: 182x268
+        super(SmallNetwork, self).__init__() # inp-size: 268x182
         self.inp_size = inp_size # tuple!
         self.conv1 = nn.Sequential(nn.BatchNorm2d(3),
                                    nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1),
