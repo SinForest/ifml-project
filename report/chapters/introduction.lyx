@@ -68,54 +68,7 @@
 
 \begin_body
 
-\begin_layout Title
-Title
-\end_layout
-
-\begin_layout Author
-Authors
-\end_layout
-
 \begin_layout Standard
-\begin_inset CommandInset toc
-LatexCommand tableofcontents
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Kapitel Einfügen: Einfügen -> Datei -> Unterdokument..
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset include
-LatexCommand include
-filename "chapters/introduction.lyx"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset include
-LatexCommand include
-filename "chapters/non_neural_network_methods.lyx"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset include
-LatexCommand include
-filename "chapters/conclusion.lyx"
-
-\end_inset
-
 
 \end_layout
 
