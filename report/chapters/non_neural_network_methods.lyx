@@ -74,24 +74,124 @@
 test
 \end_layout
 
-\begin_layout Section
-Comparison of methods and featuresets
-\end_layout
-
 \begin_layout Author
 Thorsten Wünsche (3148266)
 \end_layout
 
+\begin_layout Section
+Comparison of methods and featuresets
+\end_layout
+
+\begin_layout Standard
+In this chapter, we compare the performance of different non neural network
+ machine learning methods on the six feature sets extracted by different
+ neural networks.
+ None of the methods in this chapter were fine-tuned and only methods, that
+ could complete training and predicting the test set genres within two hours
+ per feature set are included.
+ This enabled us to compare eight different approaches on six feature sets,
+ hoping to find out which combinations are most promising.
+\end_layout
+
+\begin_layout Standard
+In section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Metrics"
+
+\end_inset
+
+, we introduce the metrics use to evaluate the approaches.
+ Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Comparing-non-neural"
+
+\end_inset
+
+ discusses the performance of each individual approach on the different
+ feature sets.
+ The usefulness of the feature sets is compared in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Comparing-feature-sets"
+
+\end_inset
+
+.
+ Finally, the findings of this chapter are summarized in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Conclusion"
+
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Subsection
 Metrics
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Metrics"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We use three different metrics to evaluate the performance of the chosen
+ machine learning methods on the feature sets.
+ Common metrics, such as precision, recall or F1 score don't apply well
+ to our problem, as assingning genres to movies is a multilabel classification
+ problem, since each movie can have more than one genre.
 \end_layout
 
 \begin_layout Paragraph
 Subset accuracy
 \end_layout
 
+\begin_layout Standard
+Subset accuracy is described by scikit learn as a harsh metric, as it requires
+ all labels to be assigned correctly.
+ Given that our data set includes 23 genres, that makes for 
+\begin_inset Formula $2^{23}=8,388,608$
+\end_inset
+
+ possible combinations, all except one of which will be considered entirely
+ wrong by this metric.
+ A correct prediction will yield 
+\begin_inset Formula $100\%$
+\end_inset
+
+, any mistakes will result in a score of 
+\begin_inset Formula $0\%$
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Paragraph
 Hamming loss
+\end_layout
+
+\begin_layout Standard
+To offset the rather strict subset accuracy, we also consider the hamming
+ loss.
+ This metric considers each genre-assignment on its own, allowing for a
+ partial success if some of the labels were predicted correctly.
+ This makes it a very forgiving metric and can make its scores seem more
+ impressive than they really are.
+ As this metric measures a loss, the best possible score is 
+\begin_inset Formula $0\%$
+\end_inset
+
+, with 
+\begin_inset Formula $100\%$
+\end_inset
+
+ being a completely wrong result.
 \end_layout
 
 \begin_layout Paragraph
@@ -99,11 +199,28 @@ Mean genres/movie
 \end_layout
 
 \begin_layout Standard
-correct value on testset: 2.68
+To evaluate how realistic our predictions are, we also consider the mean
+ amount of genres assigned to each movie.
+ The actual value for this metric on our test set is 
+\begin_inset Formula $2.68$
+\end_inset
+
+.
+ The closer a method comes to this value, the more natural its predictions
+ are.
+ This value does not consider whether the genres are chosen correctly, only
+ their number is considered.
 \end_layout
 
 \begin_layout Subsection
 Comparing non neural network methods
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Comparing-non-neural"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -5744,6 +5861,13 @@ one-vs-rest Support Vector Machine
 
 \begin_layout Subsection
 Comparing feature sets
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Comparing-feature-sets"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -5754,7 +5878,7 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Tabular
-<lyxtabular version="3" rows="9" columns="4">
+<lyxtabular version="3" rows="7" columns="4">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -5824,7 +5948,7 @@ alex_fc6
 \uwave off
 \noun off
 \color none
-0.91%
+0.87%
 \end_layout
 
 \end_inset
@@ -5845,7 +5969,7 @@ alex_fc6
 \uwave off
 \noun off
 \color none
-11.33%
+19.86%
 \end_layout
 
 \end_inset
@@ -5866,7 +5990,7 @@ alex_fc6
 \uwave off
 \noun off
 \color none
-0.28
+3.54
 \end_layout
 
 \end_inset
@@ -5878,228 +6002,6 @@ alex_fc6
 
 \begin_layout Plain Layout
 alex_fc7
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-1.04%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-11.27%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.31
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-dense161_last
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.90%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-11.25%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.28
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-res50_avg
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-1.00%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-11.19%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.33
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-vgg19bn_fc6
 \end_layout
 
 \end_inset
@@ -6141,7 +6043,7 @@ vgg19bn_fc6
 \uwave off
 \noun off
 \color none
-11.22%
+20.12%
 \end_layout
 
 \end_inset
@@ -6162,7 +6064,229 @@ vgg19bn_fc6
 \uwave off
 \noun off
 \color none
-0.32
+3.61
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+dense161_last
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+1.32%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+16.16%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+2.41
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+res50_avg
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+1.24%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+16.56%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+2.60
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+vgg19bn_fc6
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+1.06%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+19.14%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+3.42
 \end_layout
 
 \end_inset
@@ -6194,7 +6318,7 @@ vgg19bn_fc7
 \uwave off
 \noun off
 \color none
-1.05%
+1.12%
 \end_layout
 
 \end_inset
@@ -6215,7 +6339,7 @@ vgg19bn_fc7
 \uwave off
 \noun off
 \color none
-11.15%
+19.21%
 \end_layout
 
 \end_inset
@@ -6236,155 +6360,7 @@ vgg19bn_fc7
 \uwave off
 \noun off
 \color none
-0.37
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-mean
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.98%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-11.24%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.32
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-standard deviation
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.06%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.06%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.03
+3.45
 \end_layout
 
 \end_inset
@@ -6422,7 +6398,7 @@ status open
 
 \begin_layout Plain Layout
 \begin_inset Tabular
-<lyxtabular version="3" rows="9" columns="4">
+<lyxtabular version="3" rows="7" columns="4">
 <features rotate="0" tabularvalignment="middle">
 <column alignment="center" valignment="top">
 <column alignment="center" valignment="top">
@@ -6492,7 +6468,7 @@ alex_fc6
 \uwave off
 \noun off
 \color none
-0.91%
+0.71%
 \end_layout
 
 \end_inset
@@ -6513,7 +6489,7 @@ alex_fc6
 \uwave off
 \noun off
 \color none
-11.33%
+9.74%
 \end_layout
 
 \end_inset
@@ -6534,7 +6510,7 @@ alex_fc6
 \uwave off
 \noun off
 \color none
-0.28
+3.50
 \end_layout
 
 \end_inset
@@ -6566,7 +6542,7 @@ alex_fc7
 \uwave off
 \noun off
 \color none
-1.04%
+0.75%
 \end_layout
 
 \end_inset
@@ -6587,7 +6563,7 @@ alex_fc7
 \uwave off
 \noun off
 \color none
-11.27%
+10.25%
 \end_layout
 
 \end_inset
@@ -6608,7 +6584,7 @@ alex_fc7
 \uwave off
 \noun off
 \color none
-0.31
+3.62
 \end_layout
 
 \end_inset
@@ -6620,6 +6596,80 @@ alex_fc7
 
 \begin_layout Plain Layout
 dense161_last
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+0.93%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+6.15%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+2.37
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+res50_avg
 \end_layout
 
 \end_inset
@@ -6661,7 +6711,7 @@ dense161_last
 \uwave off
 \noun off
 \color none
-11.25%
+6.58%
 \end_layout
 
 \end_inset
@@ -6682,81 +6732,7 @@ dense161_last
 \uwave off
 \noun off
 \color none
-0.28
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-res50_avg
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-1.00%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-11.19%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.33
+2.47
 \end_layout
 
 \end_inset
@@ -6788,7 +6764,7 @@ vgg19bn_fc6
 \uwave off
 \noun off
 \color none
-0.96%
+0.87%
 \end_layout
 
 \end_inset
@@ -6809,7 +6785,7 @@ vgg19bn_fc6
 \uwave off
 \noun off
 \color none
-11.22%
+9.10%
 \end_layout
 
 \end_inset
@@ -6830,7 +6806,7 @@ vgg19bn_fc6
 \uwave off
 \noun off
 \color none
-0.32
+3.33
 \end_layout
 
 \end_inset
@@ -6862,7 +6838,7 @@ vgg19bn_fc7
 \uwave off
 \noun off
 \color none
-1.05%
+0.91%
 \end_layout
 
 \end_inset
@@ -6883,7 +6859,7 @@ vgg19bn_fc7
 \uwave off
 \noun off
 \color none
-11.15%
+9.14%
 \end_layout
 
 \end_inset
@@ -6904,155 +6880,7 @@ vgg19bn_fc7
 \uwave off
 \noun off
 \color none
-0.37
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-mean
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.98%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-11.24%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.32
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-standard deviation
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.06%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.06%
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-0.03
+3.34
 \end_layout
 
 \end_inset
@@ -11976,6 +11804,17 @@ vgg19bn_fc7
 
 
 \end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Conclusion
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Conclusion"
 
 \end_inset
 
