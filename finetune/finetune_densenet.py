@@ -17,12 +17,12 @@ DATA_PATH   = "../sets/set_splits.p"
 POSTER_PATH = "../posters/"
 DICT_PATH   = "../sets/gen_d.p"
 SETS_PATH   = "../sets/"
-MODEL_PATH  = "./densenet/densenet169_050.nn"
+MODEL_PATH  = "./densenet/densenet169_075.nn"
 CUDA_ON     = True
 DEBUG_MODE  = False
 
 num_epochs  = 100
-batch_s     = 256
+batch_s     = 128
 log_percent = 0.25
 s_factor    = 0.5
 learn_r     = 0.0001
