@@ -58,10 +58,10 @@ gen_d = pickle.load(open(GENRE_DICT_PATH, 'rb'))
 split = pickle.load(open(DATASET_PATH, 'rb'))
 
 tr_set = PosterSet(POSTER_PATH, split, 'train', gen_d=gen_d, augment=True, resize=None, rnd_crop=CROP_SIZE)#, debug=True)
-tr_load = DataLoader(tr_set, batch_size=256, shuffle=True, num_workers=3, drop_last=True)
+tr_load = DataLoader(tr_set, batch_size=128, shuffle=True, num_workers=3, drop_last=True)
 
 va_set = PosterSet(POSTER_PATH, split, 'val',  gen_d=gen_d, augment=False, resize=None, ten_crop=CROP_SIZE)#, debug=True)
-va_load = DataLoader(va_set, batch_size=128, shuffle=False, num_workers=3, drop_last=True)
+va_load = DataLoader(va_set, batch_size=64, shuffle=False, num_workers=3, drop_last=True)
 
 # prepare model and training utillity
 net  = MidrangeNetwork(tr_set[0][0].size()[1:], len(gen_d) // 2)
