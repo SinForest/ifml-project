@@ -101,7 +101,7 @@ os.mkdir(rnd_token)
 
 print("=== Starting Training with Token [{}] ===".format(rnd_token))
 
-for epoch in tqdm(itertools.count(1), desc="epochs:"):
+for epoch in tqdm(itertools.count(start_epoch), desc="epochs:"):
     tr_err = 0
     net.train() # puts model into 'train' mode (some layers behave differently)
     for X, y in tqdm(tr_load, desc="train:"): # iterate over training set (in mini-batches)
