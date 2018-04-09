@@ -73,7 +73,11 @@ Title
 \end_layout
 
 \begin_layout Author
-Authors
+Patrick Dammann (), Florian Fallenbüchel (), Thorsten Wünsche (3148266)
+\end_layout
+
+\begin_layout Abstract
+Here be Abstract
 \end_layout
 
 \begin_layout Standard
@@ -93,6 +97,16 @@ Kapitel Einfügen: Einfügen -> Datei -> Unterdokument..
 \begin_inset CommandInset include
 LatexCommand include
 filename "chapters/introduction.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "chapters/data_collection.lyx"
 
 \end_inset
 
