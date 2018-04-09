@@ -13,29 +13,31 @@ from reshapeLayer import ReshapeLayer
 import operator
 import sys, os
 
-data_path = "../sets/set_splits.p"
-poster_path = "../posters/"
-dict_path = "../sets/gen_d.p"
-sets_path = "../sets/"
-load_model_name = "densenet169_001.nn"
+DATA_PATH   = "../sets/set_splits.p"
+POSTER_PATH = "../posters/"
+DICT_PATH   = "../sets/gen_d.p"
+SETS_PATH   = "../sets/"
+MODEL_PATH  = "./densenet/densenet169_050.nn"
+CUDA_ON     = True
+DEBUG_MODE  = False
 
-num_epochs = 75
-batch_size = 256
-log_percent = 10
-s_factor = 0.5
-learning_rate = 0.0001
-input_size = (182, 268) #posters are all 182 width, 268 heigth
-CUDA_ON = True
+num_epochs  = 100
+batch_s     = 256
+log_percent = 0.25
+s_factor    = 0.5
+learn_r     = 0.0001
+input_size  = (182, 268) #posters are all 182 width, 268 heigth
 
-p = pickle.load(open(data_path, 'rb'))
-gen_d = pickle.load(open(dict_path, 'rb'))
 
-train_set = PosterSet(poster_path, p, 'train', gen_d=gen_d, tv_norm=True, augment=True, resize=input_size)
-train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=4)
-log_interval = (len(train_loader.dataset)/log_percent)//batch_size
+p = pickle.load(open(DATA_PATH, 'rb'))
+gen_d = pickle.load(open(DICT_PATH, 'rb'))
 
-val_set = PosterSet(poster_path, p, 'val', gen_d=gen_d, tv_norm=True, augment=True, resize=input_size)
-val_loader = torch.utils.data.DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=4)
+train_set = PosterSet(POSTER_PATH, p, 'train', gen_d=gen_d, tv_norm=True, augment=True, resize=input_size, debug=DEBUG_MODE)
+train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_s, shuffle=True, num_workers=4)
+log_interval = np.ceil((len(train_loader.dataset) * log_percent) / batch_s)
+
+val_set = PosterSet(POSTER_PATH, p, 'val', gen_d=gen_d, tv_norm=True, augment=True, resize=input_size, debug=DEBUG_MODE)
+val_loader = torch.utils.data.DataLoader(val_set, batch_size=batch_s, shuffle=False, num_workers=4)
 
 num_classes = (len(gen_d)//2)
 
@@ -63,14 +65,14 @@ classifier = nn.Sequential(
 
 model = nn.Sequential(*modules, classifier)
 
-optimizer = torch.optim.Adam(classifier.parameters(), lr=learning_rate)
+optimizer = torch.optim.Adam(classifier.parameters(), lr=learn_r)
 scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=s_factor, patience=5, verbose=True)
-#optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=momentum)
+#optimizer = optim.SGD(model.parameters(), lr=learn_r, momentum=momentum)
 criterion = nn.BCELoss(size_average=False)
 
 epoch = 1
 try:
-    train_state = torch.load(load_model_name)
+    train_state = torch.load(MODEL_PATH)
     model.load_state_dict(train_state['state_dict'])
     optimizer.load_state_dict(train_state['optim'])
     epoch = train_state['epoch'] + 1
@@ -106,7 +108,7 @@ def train(epoch):
             print('Train Epoch: {} [{:>5d}/{:> 5d} ({:>2.0f}%)]\tCurrent loss: {:.6f}'.format(
             epoch, total_size, len(train_loader.dataset), 100. * batch_id / len(train_loader), loss.data[0]/data.size(0)))
 
-    print('Train Epoch: {} Average loss: {:.6f}'.format(
+    print('Train Epoch: {} DenseNet average loss: {:.6f}'.format(
             epoch, total_loss / total_size))
     
     return (total_loss/total_size)
@@ -128,13 +130,13 @@ def validate():
     
     val_loss /= len(val_loader.dataset)
     
-    print('\nTest set: Average loss: {:.4f}\n'.format(val_loss))
+    print('\nTest set: DenseNet average loss: {:.4f}\n'.format(val_loss))
     
     return val_loss
 
 loss_list = []
 val_list = []
-for epoch in range(epoch, num_epochs):
+for epoch in range(epoch, num_epochs + 1):
     
     loss_list.append(train(epoch))
     val_loss = validate()
@@ -142,5 +144,5 @@ for epoch in range(epoch, num_epochs):
     val_list.append(val_loss)
     
     state = {'state_dict':model.state_dict(), 'optim':optimizer.state_dict(), 'epoch':epoch, 'train_loss':loss_list, 'val_loss': val_list}
-    filename = "densenet201_{:03d}.nn".format(epoch)
+    filename = "./densenet/densenet169_{:03d}.nn".format(epoch)
     torch.save(state, filename)
