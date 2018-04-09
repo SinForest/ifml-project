@@ -77,6 +77,7 @@ if len(sys.argv) > 1:
     opti.load_state_dict(load_state['opti'])
     start_epoch = load_state['epoch']
     losses = load_state['losses']
+    print("loaded mode from {}".format(sys.argv[1]))
 else:
     load_state = None
     start_epoch = 1
