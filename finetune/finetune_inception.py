@@ -17,16 +17,17 @@ DATA_PATH   = "../sets/set_splits.p"
 POSTER_PATH = "../posters/"
 DICT_PATH   = "../sets/gen_d.p"
 SETS_PATH   = "../sets/"
-MODEL_PATH  = "./resnet/resnet50_100.nn"
+MODEL_PATH  = "./inception/inception_v3_050.nn"
 CUDA_ON     = True
 DEBUG_MODE  = False
 
 num_epochs  = 100
 batch_s     = 256
+learn_r     = 0.001
+momentum    = 0.9
 log_percent = 0.25
-s_factor    = 0.5
-learn_r     = 0.0001
-input_size  = (268, 268) #posters are all 182 width, 268 heigth
+s_factor    = 0.1
+input_size  = (299, 299) #posters are all 182 width, 268 heigth, resized to fit into inception
 
 
 p = pickle.load(open(DATA_PATH, 'rb'))
@@ -41,33 +42,20 @@ val_loader = torch.utils.data.DataLoader(val_set, batch_size=batch_s, shuffle=Fa
 
 num_classes = (len(gen_d)//2)
 
-model = torchvision.models.resnet50(pretrained=True)
-modules = list(model.children())[:-1] #delete classification layer
-model = nn.Sequential(*modules)
+model = torchvision.models.inception_v3(pretrained=True)
+model.aux_logits=False  #advantage of auxiliary classifiers only kicks in on high accuracies, not needed for this project,
+                        #also eases handling the output of the model
 
 #disable grad requirement to keep pretrained weights
 for param in model.parameters():
     param.requires_grad = False
 
-calc_fc_tensor = Var(Ten(1, 3, *input_size)) #tensor for calculation of number of connections to the first fc layer
-fc_size = reduce(operator.mul, model(calc_fc_tensor).size()) #single forward pass through the network
+model.fc = nn.Linear(2048, num_classes) #replace classifier with one fitting number of classes
 
-#custom classifier
-classifier = nn.Sequential(
-                ReshapeLayer(),
-                nn.Linear(fc_size, num_classes),
-                #nn.LeakyReLU(negative_slope=0.1, inplace=True),
-                #nn.ReLU(inplace=True),
-                #nn.Linear(4096, 4096),
-                #nn.ReLU(inplace=True),
-                #nn.Linear(4096, num_classes),
-)
+optimizer = torch.optim.Adam(model.fc.parameters(), lr=learn_r)
 
-model = nn.Sequential(*modules, classifier)
-
-optimizer = torch.optim.Adam(classifier.parameters(), lr=learn_r)
 scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=s_factor, patience=5, verbose=True)
-#optimizer = optim.SGD(model.parameters(), lr=learn_r, momentum=momentum)
+
 criterion = nn.BCELoss(size_average=False)
 
 epoch = 1
@@ -108,7 +96,7 @@ def train(epoch):
             print('Train Epoch: {} [{:>5d}/{:> 5d} ({:>2.0f}%)]\tCurrent loss: {:.6f}'.format(
             epoch, total_size, len(train_loader.dataset), 100. * batch_id / len(train_loader), loss.data[0]/data.size(0)))
 
-    print('Train Epoch: {} ResNet average loss: {:.6f}'.format(
+    print('Train Epoch: {} Inception average loss: {:.6f}'.format(
             epoch, total_loss / total_size))
     
     return (total_loss/total_size)
@@ -125,12 +113,12 @@ def validate():
         data, target = Var(data, volatile = True), Var(target) 
         
         output = nn.functional.sigmoid(model(data))
-        
+
         val_loss += criterion(output, target).data[0]
     
     val_loss /= len(val_loader.dataset)
     
-    print('\nTest set: ResNet average loss: {:.4f}\n'.format(val_loss))
+    print('\nTest set: Inception average loss: {:.4f}\n'.format(val_loss))
     
     return val_loss
 
@@ -144,5 +132,6 @@ for epoch in range(epoch, num_epochs + 1):
     val_list.append(val_loss)
     
     state = {'state_dict':model.state_dict(), 'optim':optimizer.state_dict(), 'epoch':epoch, 'train_loss':loss_list, 'val_loss': val_list}
-    filename = "./resnet/resnet50_{:03d}.nn".format(epoch)
+    filename = "./inception/inception_v3_{:03d}.nn".format(epoch)
     torch.save(state, filename)
+
