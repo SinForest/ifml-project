@@ -4,7 +4,7 @@ from torch import Tensor as Ten
 from torch.autograd import Variable as Var
 from torch.utils.data import DataLoader
 
-import os
+import os, sys
 import random
 import numpy as np
 from hashlib import md5
@@ -71,6 +71,17 @@ sdlr = ReduceLROnPlateauWithLog(opti, 'min', factor=0.8, patience=12, cooldown=8
 if CUDA_ON:
     net.cuda()
 
+if len(sys.argv) > 1:
+    load_state = torch.load(sys.argv[1])
+    net.load_state_dict(load_state['state_dict'])
+    opti.load_state_dict(load_state['opti'])
+    start_epoch = load_state['epoch']
+    losses = load_state['losses']
+else:
+    load_state = None
+    start_epoch = 1
+    losses = {"train":{}, "val":{}}
+
 """
 #DEBUG!!:
 print("##################### IM HERE! #####################")
@@ -78,7 +89,6 @@ for m in net.modules():
     if isinstance(m, nn.BatchNorm2d):
         m.register_forward_hook(hook)
 """
-losses = {"train":{}, "val":{}}
 va_delay  = 1
 bg_proc = None
 
