@@ -17,16 +17,16 @@ DATA_PATH   = "../sets/set_splits.p"
 POSTER_PATH = "../posters/"
 DICT_PATH   = "../sets/gen_d.p"
 SETS_PATH   = "../sets/"
-MODEL_PATH  = "./squeezenet/squeezenet_050.nn"
+MODEL_PATH  = "./squeezenet/squeezenet_100.nn"
 CUDA_ON     = True
 DEBUG_MODE  = False
 
-num_epochs  = 100
+num_epochs  = 150
 batch_s     = 512
 learn_r     = 0.0001
 momentum    = 0.9
 log_percent = 0.25
-s_factor    = 0.1
+s_factor    = 0.25
 input_size  = (268, 182) #posters are all 182 width, 268 heigth
 
 
@@ -64,7 +64,7 @@ model.classifier = classifier
 
 optimizer = torch.optim.Adam(model.classifier.parameters(), lr=learn_r)
 
-scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=s_factor, patience=5, verbose=True)
+scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=s_factor, patience=5, verbose=True, cooldown=0)
 
 criterion = nn.BCELoss(size_average=False)
 
