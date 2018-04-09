@@ -94,6 +94,13 @@ target "https://www.imdb.com/"
 
 \end_inset
 
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "IMDb"
+
+\end_inset
+
  in three steps:
 \end_layout
 
@@ -159,7 +166,14 @@ Each page lists a total of 50 movies.
 \begin_inset CommandInset href
 LatexCommand href
 name "Beautiful Soup"
-target "https://www.crummy.com/software/BeautifulSoup/bs4/doc/"
+target "https://www.crummy.com/software/BeautifulSoup"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Beautiful Soup"
 
 \end_inset
 
@@ -297,6 +311,13 @@ Once we are in possession of the imdb-ids of the selected movies, we use
 LatexCommand href
 name "pickle"
 target "https://docs.python.org/2/library/pickle.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pickle"
 
 \end_inset
 
