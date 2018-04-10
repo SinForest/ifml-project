@@ -1,9 +1,7 @@
-#LyX 2.3 created this file. For more info see http://www.lyx.org/
-\lyxformat 544
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
 \begin_document
 \begin_header
-\save_transient_properties true
-\origin unavailable
 \textclass article
 \use_default_options true
 \maintain_unincluded_children false
@@ -11,18 +9,16 @@
 \language_package default
 \inputencoding auto
 \fontencoding global
-\font_roman "default" "default"
-\font_sans "default" "default"
-\font_typewriter "default" "default"
-\font_math "auto" "auto"
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
-\font_sf_scale 100 100
-\font_tt_scale 100 100
-\use_microtype false
-\use_dash_ligatures true
+\font_sf_scale 100
+\font_tt_scale 100
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -51,7 +47,6 @@
 \suppress_date false
 \justification true
 \use_refstyle 1
-\use_minted 0
 \index Index
 \shortcut idx
 \color #008000
@@ -60,10 +55,7 @@
 \tocdepth 3
 \paragraph_separation indent
 \paragraph_indentation default
-\is_math_indent 0
-\math_numbering_side default
-\quotes_style english
-\dynamic_quotes 0
+\quotes_language english
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
@@ -76,35 +68,24 @@
 
 \begin_body
 
-\begin_layout Title
-Here be titles
+\begin_layout Abstract
+Movie posters frequently share common elements and themes, that make it
+ possible for a human to estimate the genre of the movie without any further
+ information.
+ We attempt to find and train a machine learning model, which can replicate
+ this this behavior.
 \end_layout
 
-\begin_layout Author
-here be authors and their ids
+\begin_layout Abstract
+To this end, we use CNNs (Convolutional Neural Networks) as well as a variety
+ of more basic approaches applied to features extracted by neural networks
+ and compare their performance.
 \end_layout
 
-\begin_layout Standard
-\begin_inset CommandInset toc
-LatexCommand tableofcontents
+\begin_layout Abstract
 
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset include
-LatexCommand include
-filename "chapters/01_introduction.lyx"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Neue Kapitel via Einfügen -> Unterdokument anhängen
+\emph on
+ADD COMMENTS ON RESULTS HERE
 \end_layout
 
 \end_body

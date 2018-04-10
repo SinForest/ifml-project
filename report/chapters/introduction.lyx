@@ -68,8 +68,180 @@
 
 \begin_body
 
+\begin_layout Section
+Introduction
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Introduction"
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 
+\emph on
+Hier könnte ein cleverer Absatz darüber stehen, warum wir tun was wir tun.
+\end_layout
+
+\begin_layout Standard
+There are several different ways to approach this task.
+ While it is possible to train a neural network from the ground up, it is
+ also possible to adjust an existing network, reducing the time and training
+ data required.
+ While the number of feature dimensions is too high for more traditional
+ approaches, neural networks can also be used to select and combine features.
+ This would give even linear learners a chance to categorize movies by their
+ genre based on thier poster.
+\end_layout
+
+\begin_layout Standard
+To achieve this goal, we gather movie poster along with their corresponding
+ genres from the Internet Movie Database
+\begin_inset CommandInset citation
+LatexCommand cite
+key "IMDb"
+
+\end_inset
+
+.
+ This process is described in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Data-collection"
+
+\end_inset
+
+.
+ Using different neural networks, we extract features from these posters,
+ as is detailed in chapter 
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Hier Querverweis einfügen
+\end_layout
+
+\begin_layout Standard
+.
+ In chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Comparison-of-methods"
+
+\end_inset
+
+, we compare the performance of eight non neural network classifiers on
+ the six extracted feature sets.
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Hier könnten Ihre Kapitel stehen
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+Finally, we summarize our results in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Conclusion"
+
+\end_inset
+
+<<<<<<< HEAD
+\emph on
+Hier könnte ein cleverer Absatz darüber stehen, warum wir tun was wir tun.
+\end_layout
+
+\begin_layout Standard
+There are several different ways to approach this task.
+ While it is possible to train a neural network from the ground up, it is
+ also possible to adjust an existing network, reducing the time and training
+ data required.
+ While the number of feature dimensions is too high for more traditional
+ approaches, neural networks can also be used to select and combine features.
+ This would give even linear learners a chance to categorize movies by their
+ genre based on thier poster.
+\end_layout
+
+\begin_layout Standard
+To achieve this goal, we gather movie poster along with their corresponding
+ genres from the Internet Movie Database
+\begin_inset CommandInset citation
+LatexCommand cite
+key "IMDb"
+
+\end_inset
+
+.
+ This process is described in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Data-collection"
+
+\end_inset
+
+.
+ Using different neural networks, we extract features from these posters,
+ as is detailed in chapter 
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Hier Querverweis einfügen
+\end_layout
+
+\begin_layout Standard
+.
+ In chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Comparison-of-methods"
+
+\end_inset
+
+, we compare the performance of eight non neural network classifiers on
+ the six extracted feature sets.
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+Hier könnten Ihre Kapitel stehen
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+Finally, we summarize our results in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Conclusion"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The source code produced for this project can be found at 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://github.com/SinForest/ifml-project
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \end_body

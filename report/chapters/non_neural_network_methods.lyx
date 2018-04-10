@@ -70,12 +70,19 @@
 
 \begin_body
 
-\begin_layout Author
-Thorsten Wünsche (3148266)
-\end_layout
-
 \begin_layout Section
 Comparison of methods and feature sets
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Comparison-of-methods"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+by Thorsten Wünsche
 \end_layout
 
 \begin_layout Standard
@@ -205,7 +212,7 @@ To evaluate how realistic our predictions are, we also consider the mean
  The closer a method comes to this value, the more natural its predictions
  are.
  This value does not consider whether the genres are chosen correctly, only
- their number is considered.
+ their number is relevant.
 \end_layout
 
 \begin_layout Subsection
@@ -220,7 +227,7 @@ name "sub:Comparing-non-neural"
 \end_layout
 
 \begin_layout Standard
-In this section we evaluate the scikit-learn implementations of our chosen
+In this section, we evaluate the scikit-learn implementations of our chosen
  machine learning methods on the six feature sets with regard to the three
  metrics introduced in section 
 \begin_inset CommandInset ref
@@ -230,12 +237,19 @@ reference "sub:Metrics"
 \end_inset
 
 .
- Most approaches to not support multi-label classification by default, therefore
+ Most approaches do not support multi-label classification by default, therefore
  the 
 \begin_inset CommandInset href
 LatexCommand href
 name "OneVsRestClassifier"
 target "http://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OneVsRestClassifier.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "OneVsRest"
 
 \end_inset
 
@@ -429,7 +443,14 @@ First we test two different implementations of Naive Bayes: the basic
 \begin_inset CommandInset href
 LatexCommand href
 name "BernoulliNB"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.BernoulliNB.html#sklearn.naive_bayes.BernoulliNB"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.BernoulliNB.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "BernoulliNB"
 
 \end_inset
 
@@ -444,7 +465,14 @@ reference "tab:one-vs-rest-Naive-Bayes"
 \begin_inset CommandInset href
 LatexCommand href
 name "GaussianNB"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html#sklearn.naive_bayes.GaussianNB"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "GaussianNB"
 
 \end_inset
 
@@ -1813,7 +1841,7 @@ name "tab:one-vs-rest-Naive-Bayes-Gauss"
 Naive Bayes has the potential to perform relatively well on high dimensional
  data sets, as considering each dimension separately reduces the need for
  extremely high numbers of training samples.
- The performance of both implementation on this problem however is very
+ The performance of both implementations on this problem however is very
  poor.
  Both accuracy measures fall behind even the naive prediction.
  The reason for this is likely the high number of genres predicted for each
@@ -1827,7 +1855,7 @@ The notable exception to this is
 \begin_inset CommandInset href
 LatexCommand href
 name "BernoulliNB"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.BernoulliNB.html#sklearn.naive_bayes.BernoulliNB"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.BernoulliNB.html"
 
 \end_inset
 
@@ -1852,7 +1880,7 @@ The previous poor performance of
 \begin_inset CommandInset href
 LatexCommand href
 name "GaussianNB"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html#sklearn.naive_bayes.GaussianNB"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html"
 
 \end_inset
 
@@ -1862,7 +1890,14 @@ target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.Gau
 \begin_inset CommandInset href
 LatexCommand href
 name "QuadraticDiscriminantAnalysis"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis.html#sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "QDA"
 
 \end_inset
 
@@ -2032,7 +2067,7 @@ While it outperforms
 \begin_inset CommandInset href
 LatexCommand href
 name "GaussianNB"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html#sklearn.naive_bayes.GaussianNB"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html"
 
 \end_inset
 
@@ -2066,9 +2101,16 @@ target "http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeig
 
 \end_inset
 
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "knn"
+
+\end_inset
+
  supports multi-label classification by default.
- Regrettably it takes a significant amount of time to make predictions even
- though training can be done very quickly.
+ Regrettably, it takes a significant amount of time to make predictions
+ even though training can be done very quickly.
  This is due to the rather large number of training samples used, which
  slows down the process even when using a tree structure to increase the
  speed of predictions.
@@ -2088,8 +2130,8 @@ target "http://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OneV
 
 \end_inset
 
- would have required almost an entire day to get through the training set
- and was thus abandoned.
+ would have required almost an entire day to get through the test set and
+ was thus abandoned.
 \end_layout
 
 \begin_layout Standard
@@ -2842,6 +2884,13 @@ The
 LatexCommand href
 name "DecisionTreeClasifier"
 target "http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Tree"
 
 \end_inset
 
@@ -4257,6 +4306,13 @@ target "http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.Random
 
 \end_inset
 
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Forest"
+
+\end_inset
+
  is closely related to the 
 \begin_inset CommandInset href
 LatexCommand href
@@ -5652,7 +5708,7 @@ ly lower mean genres/movie score.
 \end_layout
 
 \begin_layout Standard
-In this state, this method is of no real use.
+In this state, the method is of no real use.
  It does offer a clear perspective for improvement though, as obtaining
  more training data is not too difficult.
 \end_layout
@@ -5689,11 +5745,18 @@ We tested two different implementations.
 \begin_inset CommandInset href
 LatexCommand href
 name "SVC"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html"
 
 \end_inset
 
- does not scale well with large data sets, which lead to training taking
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "SVC"
+
+\end_inset
+
+ does not scale well with large training sets, which lead to training taking
  over eight hours on a single feature set, at which point this implementation
  was abandoned.
 \end_layout
@@ -5703,7 +5766,14 @@ Instead we used
 \begin_inset CommandInset href
 LatexCommand href
 name "LinearSVC"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html#sklearn.svm.LinearSVC"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LinearSVC"
 
 \end_inset
 
@@ -6388,7 +6458,7 @@ name "tab:one-vs-rest-Support-Vector"
 \begin_layout Standard
 The results are a mixed bag.
  The mean genres/movie vary a lot, but are in the right area, making the
- SVM second only to the decision tree regarding this metric.
+ SVM second only to the Decision Tree regarding this metric.
 \end_layout
 
 \begin_layout Standard
@@ -6397,8 +6467,8 @@ Accuracy varies a lot as well, with the dense161_last feature set emerging
 \end_layout
 
 \begin_layout Standard
-The performance overall is does not excel at any particular area, though
- the overall performance is relatively solid.
+The performance does not excel at any particular area, though it is overall
+ relatively solid.
  There may be room for improvement by either providing 
 \begin_inset CommandInset href
 LatexCommand href
@@ -7503,7 +7573,7 @@ The overall best accuracy was achieved with dense161_last, followed closely
 \end_layout
 
 \begin_layout Standard
-The features extracted by AlexNet were outperformed ob almost all approaches,
+The features extracted by AlexNet were outperformed on almost all approaches,
  the only exception being the Decision Tree.
  Therefore, they should not be used to train other methods for this task.
 \end_layout
@@ -7511,7 +7581,7 @@ The features extracted by AlexNet were outperformed ob almost all approaches,
 \begin_layout Standard
 VGG19 with batchnorm was all right, but did not shine on any method in particula
 r.
- For this task there seems to be no reason to pick these feature sets over
+ For this task, there seems to be no reason to pick these feature sets over
  
 \family roman
 \series medium
