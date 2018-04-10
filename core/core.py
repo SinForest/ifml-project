@@ -132,3 +132,19 @@ def plot_losses(d, folder, shift=True):
     plt.savefig(folder + "/plot_current.png")
     copyfile(folder + "/plot_current.png", folder + "/plot_after_{}.png".format(max(x)))
 #[end] plot_losses(d)
+
+def accuracy(pred, label): #single instance use only
+    assert label.size(0) == pred.size(0)
+    N = pred.size(0)
+    n_gen = label.sum()
+
+    sor, ind = pred.sort()
+    true_ind = label.nonzero()
+    res = []
+    for cl in true_ind:
+        pos = (ind == cl).nonzero()[0,0]
+        a = (pos - n_gen + 1)
+        b = (N - 2*n_gen + 1)
+        score = a/b
+        res.append(min(1, max(0, score)))
+    return sum(res) / len(res)

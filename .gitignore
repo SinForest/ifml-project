@@ -4,3 +4,5 @@
 **/.vscode
 **/*.nn
 cnn_training/*/*.png
+**/#*#
+**/*~

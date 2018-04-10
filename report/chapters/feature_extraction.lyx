@@ -1,0 +1,366 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Feature Extraction
+\end_layout
+
+\begin_layout Standard
+For many machine learning approaches, images pose a hard challenge.
+ They are made of high dimensional data that is correlated in hard to determine
+ ways.
+ For this reason, images are often represented with the help of so-called
+ feature vectors in computer vision.
+ Each element in these vectors represents a specific feature of the images
+ contents, which means that low distance of two feature vectors indicates
+ low difference in their corresponding images contents.
+\end_layout
+
+\begin_layout Standard
+Over the last years, convolutional neural networks have proven to be the
+ state-of-the-art method for extracting meaningful features from images.
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+citation needed
+\end_layout
+
+\end_inset
+
+ While these vectors are hard to interpret by humans
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+citation needed
+\end_layout
+
+\end_inset
+
+, many machine learning algorithms perform a lot better on them than on
+ images.
+ Some approaches in this project require strong features, which is why we
+ decided to extract and compare features of different, pretrained neural
+ networks.
+\end_layout
+
+\begin_layout Standard
+In section 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "subsec:feat-How-it-works"
+plural "false"
+caps "true"
+noprefix "false"
+
+\end_inset
+
+, the general approach is described, section 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "subsec:feat-The-different-architectures"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ shortly summarizes the used architectures and section 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "subsec:feat-Implementation"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ gives a quick insight on some details in the used implementation.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:feat-How-it-works"
+
+\end_inset
+
+How it works
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+image, alex net filter visu?
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Convolutional neural networks process data layer-wise.
+ Each layer here takes an input of information and transforms it to an output
+ containing higher-level information.
+ This output is than used for the next layer, whose outputs are again used
+ for the next layer.
+ This way, high-level information can be extracted bit by bit from low-level
+ data, for example from pixels to edges to shapes to parts to objects and
+ finally to a classification in object classes.
+ 
+\end_layout
+
+\begin_layout Standard
+This build-up enables us to stop a pretrained the network after it condensed
+ most information, but before the information gets to high-level (e.g.
+ 1000 class scores are bad features to describe general image content).
+ The output of the last layer before the 
+\begin_inset Quotes eld
+\end_inset
+
+stop
+\begin_inset Quotes erd
+\end_inset
+
+ then contains condensed information about the input image and can be considered
+ a feature vector.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:feat-The-different-architectures"
+
+\end_inset
+
+The different architectures
+\end_layout
+
+\begin_layout Standard
+We have tried different network architectures to extract feature vectors.
+ All of these architectures come from the torchvision
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+link needed
+\end_layout
+
+\end_inset
+
+ module and are pretrained on ImageNet
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+link needed
+\end_layout
+
+\end_inset
+
+, a famous dataset containing 
+\begin_inset Formula $1.2$
+\end_inset
+
+ million labeled photographs.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+trained on other data
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+AlexNet AlexNet was the first neural network to achieve superb scores in
+ image classification tasks and therefore started the current 
+\begin_inset Quotes eld
+\end_inset
+
+deep-learning-boom
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The original paper also pointed out the strength of neural networks as
+ feature extractors.
+\end_layout
+
+\begin_layout Description
+VGG19BN This is the biggest network
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+check
+\end_layout
+
+\end_inset
+
+ proposed in 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+ref
+\end_layout
+
+\end_inset
+
+, modified with additional batch normalization layers.
+ It shares a similar architecture with AlexNet, but exchanges the convolutional
+ layers, that mostly utilize big filters, with stacks of multiple convolutional
+ layers with small filters, which reduces parameter count and improves the
+ models ability to abstract, without strong influence on its receptive field.
+ VGG19 usually scores better at classification tasks than AlexNet.
+\end_layout
+
+\begin_layout Description
+ResNet50 This residual convolutional neural network was an attempt on countering
+ the vanishing gradient problem, that one encounters when dealing with too
+ deep networks.
+ Since for too deep networks, often no useful gradient reaches the lower
+ layers when backpropagating, ResNet adds 
+\emph on
+shortcut layers
+\emph default
+ parallel to most blocks of convolutional layers, that add their input to
+ the out put of the last layer they skip.
+ These shortcut layers are of course also used when backpropagating, giving
+ the gradient an easy way through the network.
+ ResNet50 is one of the smaller networks proposed.
+\end_layout
+
+\begin_layout Description
+DenseNet161 DenseNet takes up the idea of layer-dropout, where whole layers
+ are skipped randomly during training.
+ But instead of really skipping them, DenseNet simulates this behavior by
+ connecting all layers with each other, weighting individual connections
+ by the probability that all intermediate layers would have been dropped
+ when using layer-dropout.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:feat-Implementation"
+
+\end_inset
+
+Implementation
+\end_layout
+
+\begin_layout Standard
+All features have been extracted using pretrained models form the torchvision
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+ref
+\end_layout
+
+\end_inset
+
+ module, by slightly modifying their behavior.
+ For AlexNet and VGG19, the last fully connected layer has been removed,
+ while for ResNet and DenseNet hook functions have been registered to return
+ intermediate outputs.
+\end_layout
+
+\begin_layout Standard
+Since these models are trained on inputs of size 
+\begin_inset Formula $224\times224$
+\end_inset
+
+, all posters have been resized and fed into the model.
+ The results are stored in HDF5 containers for further use in later experiments.
+\end_layout
+
+\end_body
+\end_document
