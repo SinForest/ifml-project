@@ -26,7 +26,7 @@ def test_distribution():
     loss = 0
     for X, y in tqdm(te_load, desc='rnd'):
         for i in range(X.size(0)):
-            loss += accuracy(pred, y)
+            loss += accuracy(pred, y[i])
     
     return loss / len(te_set)
 
