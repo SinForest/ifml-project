@@ -46,7 +46,7 @@ def test_rnd_network():
 
 
 def test_2nd_snapshot():
-    te_set = PosterSet(POSTER_PATH, split, 'test',  gen_d=gen_d, augment=False, resize=None, ten_crop=None, debug=True)
+    te_set = PosterSet(POSTER_PATH, split, 'test',  gen_d=gen_d, augment=False, resize=None, ten_crop=None)#, debug=True)
     te_load = DataLoader(te_set, batch_size=64, shuffle=False, num_workers=3, drop_last=True)
     model = SmallNetwork(INP_SIZE, 23)
     state = torch.load(SNAP_PATH + "snap2nd.nn")
@@ -72,7 +72,7 @@ def test_2nd_snapshot():
     return loss / (len(te_set) - skipped)
 
 def test_3rd_snapshot():
-    te_set = PosterSet(POSTER_PATH, split, 'test',  gen_d=gen_d, augment=False, resize=None, ten_crop=None, debug=True)
+    te_set = PosterSet(POSTER_PATH, split, 'test',  gen_d=gen_d, augment=False, resize=None, ten_crop=None)#, debug=True)
     te_load = DataLoader(te_set, batch_size=64, shuffle=False, num_workers=3, drop_last=True)
     model = SmallerNetwork(INP_SIZE, 23)
     state = torch.load(SNAP_PATH + "snap3rd.nn")
@@ -98,7 +98,7 @@ def test_3rd_snapshot():
     return loss / (len(te_set) - skipped)
 
 def test_4th_snapshot():
-    te_set = PosterSet(POSTER_PATH, split, 'test',  gen_d=gen_d, augment=False, resize=None, ten_crop=CROP_SIZE, debug=True)
+    te_set = PosterSet(POSTER_PATH, split, 'test',  gen_d=gen_d, augment=False, resize=None, ten_crop=CROP_SIZE)#, debug=True)
     te_load = DataLoader(te_set, batch_size=64, shuffle=False, num_workers=3, drop_last=True)
     model = SmallNetwork(CROP_SIZE, 23)
     state = torch.load(SNAP_PATH + "snap4th.nn")
@@ -128,7 +128,7 @@ def test_4th_snapshot():
     return loss / (len(te_set) - skipped)
 
 def test_5th_snapshot():
-    te_set = PosterSet(POSTER_PATH, split, 'test',  gen_d=gen_d, augment=False, resize=None, ten_crop=CROP_SIZE, debug=True)
+    te_set = PosterSet(POSTER_PATH, split, 'test',  gen_d=gen_d, augment=False, resize=None, ten_crop=CROP_SIZE)#, debug=True)
     te_load = DataLoader(te_set, batch_size=64, shuffle=False, num_workers=3, drop_last=True)
     model = MidrangeNetwork(CROP_SIZE, 23)
     state = torch.load(SNAP_PATH + "snap5th.nn")
