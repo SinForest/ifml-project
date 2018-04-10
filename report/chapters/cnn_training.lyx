@@ -103,6 +103,12 @@ The training process was running on a GeForce GTX 1070 and a Intel Core
 \end_layout
 
 \begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Output-+-Metrics"
+
+\end_inset
+
 Output + Metrics
 \end_layout
 
@@ -311,6 +317,93 @@ Small Network
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/cobalt/vl/ifml/project/cnn_training/plot2nd.png
+	lyxscale 15
+	width 48col%
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/cobalt/vl/ifml/project/cnn_training/plot3rd.png
+	lyxscale 15
+	width 48col%
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:2nd-3rd"
+
+\end_inset
+
+Losses on the train set (in train mode) and val set (in eval mode).
+
+\series bold
+ 
+\begin_inset Newline newline
+\end_inset
+
+left:
+\series default
+ The small network architecture in 
+\begin_inset Formula $\sim250$
+\end_inset
+
+ epochs of training.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+right:
+\series default
+ The smaller network in 
+\begin_inset Formula $\sim200$
+\end_inset
+
+ epochs of training.
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+both:
+\series default
+ The triangles indicate a reduction of the learning rate.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 The small architecture is inspired by VGG 
 \begin_inset Note Note
 status open
@@ -346,8 +439,62 @@ As non-linear activations, this network uses ELUs.
 \end_layout
 
 \begin_layout Standard
+As loss function, we use the BCELoss as described in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Output-+-Metrics"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, we optimize our network with Adam
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+ref
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
 To improve learning, a learning rate scheduler has been used, that reduces
  the learning rate if the validation loss has not improved for several epochs.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As to be seen in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:2nd-3rd"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ (l), the model tends to overfit.
+ This is mainly indicated by the training loss constantly falling until
+ the 
+\begin_inset Formula $100$
+\end_inset
+
+th epoch, while the validation loss raises again after dropping a little.
+ Since the losses achieved are only marginally better then the losses of
+ the first epoch, the model does not seem to learn relevant information
+ about the data.
 \end_layout
 
 \begin_layout Subsubsection
@@ -363,13 +510,130 @@ To ensure that the bad losses do not come from the model being too big for
  half the number of parameters.
 \end_layout
 
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:2nd-3rd"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ (r) shows that the validation loss stayed nearly the same, compared to
+ the last experiment, while the training loss converges similar, but to
+ a higher bound.
+ We now assume that the 
+\begin_inset Quotes eld
+\end_inset
+
+Small
+\begin_inset Quotes erd
+\end_inset
+
+ model is not too big for our problem, so the overfitting might come from
+ too less data.
+\end_layout
+
 \begin_layout Subsubsection
 Small Network (random crop)
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/cobalt/vl/ifml/project/cnn_training/plot4th.png
+	lyxscale 15
+	width 48col%
+
+\end_inset
+
+
+\begin_inset space \space{}
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/cobalt/vl/ifml/project/cnn_training/plot5th.png
+	lyxscale 15
+	width 48col%
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:4th-5th"
+
+\end_inset
+
+Losses on the train set (in train mode) and val set (in eval mode).
+
+\series bold
+ 
+\begin_inset Newline newline
+\end_inset
+
+left:
+\series default
+ The small network architecture in 
+\begin_inset Formula $\sim250$
+\end_inset
+
+ epochs of training, using random crops in training and ten crops in validation.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+right:
+\series default
+ The midsized network in 
+\begin_inset Formula $\sim220$
+\end_inset
+
+ epochs of training, using the same crops.
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+both:
+\series default
+ The triangles indicate a reduction of the learning rate.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 In this milestone, the first architecture has been trained again, but this
- time on random crops of the data.
+ time on random crops of the data, to counter the problem of the too small
+ training set.
  At training time, the model gets a random 
 \begin_inset Formula $160\times160$
 \end_inset
@@ -377,6 +641,33 @@ In this milestone, the first architecture has been trained again, but this
  crop of each (augmented) image as input, at test time it gets the center
  crop and the four corner crops of the images as well as their horizontally
  mirrored versions and averages over the results.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This time, as shown in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:4th-5th"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ (l), both training loss and validation loss converge together to a bound
+ that is lower then the validation loss has been in all experiments before,
+ which might be a partial success.
+ It is notable, that the validation loss is always lower than the training
+ loss, which should not happen in normal cases.
+ But this might come from the averaging over the results, bringing an advantage
+ similar to those of ensemble methods.
 \end_layout
 
 \begin_layout Subsubsection
@@ -387,6 +678,8 @@ Medium Network (random crop)
 This is the same training process as before, but with a bigger network architect
 ure, which has more feature maps per convolutional layer and more neurons
  in the first fully connected layer.
+ Also, the learning rate scheduler as been weakened, since it seemed like
+ it might induce convergence too soon by making the learning rate too small.
 \end_layout
 
 \begin_layout Subsection
