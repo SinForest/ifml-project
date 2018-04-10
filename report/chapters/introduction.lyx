@@ -79,15 +79,12 @@ name "sec:Introduction"
 
 \end_layout
 
-<<<<<<< HEAD
-=======
 \begin_layout Standard
 
 \emph on
 Hier könnte ein cleverer Absatz darüber stehen, warum wir tun was wir tun.
 \end_layout
 
->>>>>>> d1b2e130e17fdcedfc02a9a6e0b75e94f3cc6c99
 \begin_layout Standard
 There are several different ways to approach this task.
  While it is possible to train a neural network from the ground up, it is
@@ -244,8 +241,6 @@ https://github.com/SinForest/ifml-project
 
 \end_inset
 
-=======
->>>>>>> d1b2e130e17fdcedfc02a9a6e0b75e94f3cc6c99
 .
 \end_layout
 
