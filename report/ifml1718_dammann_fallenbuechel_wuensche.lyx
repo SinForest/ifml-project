@@ -97,7 +97,33 @@ LatexCommand tableofcontents
 \end_layout
 
 \begin_layout Standard
+\begin_inset FloatList table
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FloatList figure
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 Kapitel Einfügen: Einfügen -> Datei -> Unterdokument..
+\end_layout
+
+\begin_layout Standard
+Für Tabellen und Bilder bitte die entsprechenden Gleitobjekte benutzen,
+ damit sie in den automatisch erstellten Verzeichnissen auftauchen
+\end_layout
+
+\begin_layout Standard
+Marker und Querverweise sind nützlich, um einzelne Textabschnitte nicht
+ von hand nummerieren zu müssen.
 \end_layout
 
 \begin_layout Standard
