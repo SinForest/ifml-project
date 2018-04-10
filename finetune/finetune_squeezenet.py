@@ -17,7 +17,7 @@ DATA_PATH   = "../sets/set_splits.p"
 POSTER_PATH = "../posters/"
 DICT_PATH   = "../sets/gen_d.p"
 SETS_PATH   = "../sets/"
-MODEL_PATH  = "./squeezenet/squeezenet_100.nn"
+MODEL_PATH  = "./squeezenet/squeezenet_127.nn"
 CUDA_ON     = True
 DEBUG_MODE  = False
 

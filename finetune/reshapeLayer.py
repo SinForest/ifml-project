@@ -1,3 +1,4 @@
+#!/bin/env python3
 import torch.nn as nn
 from torch.autograd import Variable as Var
 #Reshape Layer to transform Tensor into Vector for Fully Connected Layer computation

@@ -56,11 +56,6 @@ fc_size = reduce(operator.mul, model(calc_fc_tensor).size()) #single forward pas
 classifier = nn.Sequential(
                 ReshapeLayer(),
                 nn.Linear(fc_size, num_classes),
-                #nn.LeakyReLU(negative_slope=0.1, inplace=True),
-                #nn.ReLU(inplace=True),
-                #nn.Linear(4096, 4096),
-                #nn.ReLU(inplace=True),
-                #nn.Linear(4096, num_classes),
 )
 
 model = nn.Sequential(*modules, classifier)
