@@ -77,7 +77,116 @@
 \begin_body
 
 \begin_layout Section
+Creating Datasets
+\end_layout
 
+\begin_layout Standard
+For our used methods, a split of the data is required, which is why we have
+ split up the data into three sets:
+\end_layout
+
+\begin_layout Description
+training
+\begin_inset space ~
+\end_inset
+
+set this is the data, that is used by all our models to learn
+\end_layout
+
+\begin_layout Description
+validation
+\begin_inset space ~
+\end_inset
+
+set this is used like a test set during training, to monitor improvements
+ in training, or to make decisions over hyper-parameters
+\end_layout
+
+\begin_layout Description
+test
+\begin_inset space ~
+\end_inset
+
+set this is not touched until the very end, to ensure that none of the images
+ in the test set have had even indirect influence on our models
+\end_layout
+
+\begin_layout Standard
+Through all sets, the distribution of genres in the whole crawled data has
+ been preserved, while weighting labels based on the amount of different
+ genres a movie has.
+ Example: a set contains:
+\begin_inset Newline newline
+\end_inset
+
+movie A ('Action')
+\begin_inset Newline newline
+\end_inset
+
+movie B ('Action', 'Drama', 'Comedy') and
+\begin_inset Newline newline
+\end_inset
+
+movie C ('Comedy', 'Animation'),
+\begin_inset Newline newline
+\end_inset
+
+and therefore contains 
+\begin_inset Formula $1.\overline{3}$
+\end_inset
+
+ 'Action', 
+\begin_inset Formula $0.8\overline{3}$
+\end_inset
+
+ 'Comedy', 
+\begin_inset Formula $0.5$
+\end_inset
+
+ 'Animation' and 
+\begin_inset Formula $0.\overline{3}$
+\end_inset
+
+ 'Drama'.
+\end_layout
+
+\begin_layout Standard
+Distributing the genres equally would have been too big of a challenge,
+ if it's even solvable with our data, so we kept the distribution of out
+ data, hoping that it models the real world in a good way (since this distributi
+on needs to come from somewhere).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+size 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Dataset Classes
+\end_layout
+
+\begin_layout Standard
+The pytorch library features classes to simplify the iteration over the
+ dataset while preprocessing and augmenting the in parallel.
+ 
+\end_layout
+
+\begin_layout Standard
+Our dataset class loads pictures from one subset (or all 3) on the fly from
+ disk (since they might not all fit into the RAM completely), and transforms
+ them into torch Tensors.
+ It also has the ability to optionally resize and standardize them, apply
+ light random augmentations (like turning, shift of hue or brightness),
+ as well as outputting random crops (for training) or ten crops (for validating).
 \end_layout
 
 \end_body

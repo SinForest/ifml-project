@@ -207,7 +207,7 @@ To finally evaluate our models on the test set, we came up with an easy
 0\\
 0\\
 1
-\end{array}\right)\text{, scores}_{\Xi}=\left[1,0.5\right]\text{, acc}=0.75$
+\end{array}\right)\text{, scores}_{\Xi}=\left[1,0.5\right]\text{, acc}_{\Xi}=0.75$
 \end_inset
 
 
@@ -226,7 +226,7 @@ To finally evaluate our models on the test set, we came up with an easy
 0\\
 0\\
 1
-\end{array}\right)\text{, scores}_{\heartsuit}=\left[0.25\right]\text{, acc}=0.25$
+\end{array}\right)\text{, scores}_{\heartsuit}=\left[0.25\right]\text{, acc}_{\heartsuit}=0.25$
 \end_inset
 
 
@@ -300,23 +300,105 @@ Approaches
 \end_layout
 
 \begin_layout Standard
-On the way of finding 
+On the way of finding a good network architecture for our problem, many
+ improvements have been made to the architecture definition, as well as
+ the training process.
+ The following sub-chapters describe milestones on this way.
 \end_layout
 
 \begin_layout Subsubsection
 Small Network
 \end_layout
 
+\begin_layout Standard
+The small architecture is inspired by VGG 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+ref
+\end_layout
+
+\end_inset
+
+, especially its convolutional layers.
+ Instead of big filters, multiple convolutional layers with small filters
+ are used before each pooling layer.
+\end_layout
+
+\begin_layout Standard
+As non-linear activations, this network uses ELUs.
+ Each convolutional layer is prefixed with a batch normalization layer and
+ each block of two convolutional layers is followed by a 
+\begin_inset Formula $2\times2$
+\end_inset
+
+ max-pooling and a dropout layer with 
+\begin_inset Formula $p=0.25$
+\end_inset
+
+.
+ The fully connected layers are prefixed with a dropout layer with 
+\begin_inset Formula $p=0.5$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+To improve learning, a learning rate scheduler has been used, that reduces
+ the learning rate if the validation loss has not improved for several epochs.
+\end_layout
+
 \begin_layout Subsubsection
 Smaller Network
+\end_layout
+
+\begin_layout Standard
+To ensure that the bad losses do not come from the model being too big for
+ the problem and therefore underfitting, a smaller network architecture
+ is tested.
+ It is trained the exact same way, but is inspired more by AlexNet, having
+ single convolutional layers with bigger filters and therefore less then
+ half the number of parameters.
 \end_layout
 
 \begin_layout Subsubsection
 Small Network (random crop)
 \end_layout
 
+\begin_layout Standard
+In this milestone, the first architecture has been trained again, but this
+ time on random crops of the data.
+ At training time, the model gets a random 
+\begin_inset Formula $160\times160$
+\end_inset
+
+ crop of each (augmented) image as input, at test time it gets the center
+ crop and the four corner crops of the images as well as their horizontally
+ mirrored versions and averages over the results.
+\end_layout
+
 \begin_layout Subsubsection
 Medium Network (random crop)
+\end_layout
+
+\begin_layout Standard
+This is the same training process as before, but with a bigger network architect
+ure, which has more feature maps per convolutional layer and more neurons
+ in the first fully connected layer.
+\end_layout
+
+\begin_layout Subsection
+Baselines
+\end_layout
+
+\begin_layout Standard
+Random Neural Network
+\end_layout
+
+\begin_layout Standard
+Distribution
 \end_layout
 
 \begin_layout Subsection
