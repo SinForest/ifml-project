@@ -68,15 +68,24 @@
 
 \begin_body
 
-\begin_layout Section
-Conclusion
-\begin_inset CommandInset label
-LatexCommand label
-name "sec:Conclusion"
+\begin_layout Abstract
+Movie posters frequently share common elements and themes, that make it
+ possible for a human to estimate the genre of the movie without any further
+ information.
+ We attempt to find and train a machine learning model, which can replicate
+ this this behavior.
+\end_layout
 
-\end_inset
+\begin_layout Abstract
+To this end, we use CNNs (Convolutional Neural Networks) as well as a variety
+ of more basic approaches applied to features extracted by neural networks
+ and compare their performance.
+\end_layout
 
+\begin_layout Abstract
 
+\emph on
+ADD COMMENTS ON RESULTS HERE
 \end_layout
 
 \end_body

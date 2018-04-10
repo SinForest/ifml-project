@@ -70,12 +70,19 @@
 
 \begin_body
 
-\begin_layout Author
-Thorsten Wünsche (3148266)
-\end_layout
-
 \begin_layout Section
 Comparison of methods and feature sets
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Comparison-of-methods"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+by Thorsten Wünsche
 \end_layout
 
 \begin_layout Standard
@@ -236,6 +243,13 @@ reference "sub:Metrics"
 LatexCommand href
 name "OneVsRestClassifier"
 target "http://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OneVsRestClassifier.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "OneVsRest"
 
 \end_inset
 
@@ -429,7 +443,14 @@ First we test two different implementations of Naive Bayes: the basic
 \begin_inset CommandInset href
 LatexCommand href
 name "BernoulliNB"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.BernoulliNB.html#sklearn.naive_bayes.BernoulliNB"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.BernoulliNB.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "BernoulliNB"
 
 \end_inset
 
@@ -444,7 +465,14 @@ reference "tab:one-vs-rest-Naive-Bayes"
 \begin_inset CommandInset href
 LatexCommand href
 name "GaussianNB"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html#sklearn.naive_bayes.GaussianNB"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "GaussianNB"
 
 \end_inset
 
@@ -1827,7 +1855,7 @@ The notable exception to this is
 \begin_inset CommandInset href
 LatexCommand href
 name "BernoulliNB"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.BernoulliNB.html#sklearn.naive_bayes.BernoulliNB"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.BernoulliNB.html"
 
 \end_inset
 
@@ -1852,7 +1880,7 @@ The previous poor performance of
 \begin_inset CommandInset href
 LatexCommand href
 name "GaussianNB"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html#sklearn.naive_bayes.GaussianNB"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html"
 
 \end_inset
 
@@ -1862,7 +1890,14 @@ target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.Gau
 \begin_inset CommandInset href
 LatexCommand href
 name "QuadraticDiscriminantAnalysis"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis.html#sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.discriminant_analysis.QuadraticDiscriminantAnalysis.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "QDA"
 
 \end_inset
 
@@ -2032,7 +2067,7 @@ While it outperforms
 \begin_inset CommandInset href
 LatexCommand href
 name "GaussianNB"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html#sklearn.naive_bayes.GaussianNB"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html"
 
 \end_inset
 
@@ -2063,6 +2098,13 @@ The
 LatexCommand href
 name "KNeighborsClassifier"
 target "http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "knn"
 
 \end_inset
 
@@ -2842,6 +2884,13 @@ The
 LatexCommand href
 name "DecisionTreeClasifier"
 target "http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Tree"
 
 \end_inset
 
@@ -4254,6 +4303,13 @@ The
 LatexCommand href
 name "RandomForestClassifier"
 target "http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Forest"
 
 \end_inset
 
@@ -5689,7 +5745,14 @@ We tested two different implementations.
 \begin_inset CommandInset href
 LatexCommand href
 name "SVC"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "SVC"
 
 \end_inset
 
@@ -5703,7 +5766,14 @@ Instead we used
 \begin_inset CommandInset href
 LatexCommand href
 name "LinearSVC"
-target "http://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html#sklearn.svm.LinearSVC"
+target "http://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LinearSVC"
 
 \end_inset
 

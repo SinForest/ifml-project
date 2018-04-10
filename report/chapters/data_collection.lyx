@@ -1,0 +1,392 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement h
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Data collection
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Data-collection"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+by Thorsten Wünsche 
+\end_layout
+
+\begin_layout Standard
+Our goal is to recognize a movies genres using only the movies poster.
+ To train a machine learning model to do so, a large amount of movie posters,
+ a lot of a list with the corresponding genres is required to build training,
+ validation and test sets.
+\end_layout
+
+\begin_layout Standard
+We collect this data from the 
+\begin_inset CommandInset href
+LatexCommand href
+name "Internet Movie Database (IMDb)"
+target "https://www.imdb.com/"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "IMDb"
+
+\end_inset
+
+ in three steps:
+\end_layout
+
+\begin_layout Standard
+First, we select which movies to include in our data set as described in
+ section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Selection-of-movies"
+
+\end_inset
+
+.
+ Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Collecting-movie-details"
+
+\end_inset
+
+ illustrates which data is collected from these movies.
+ Finally, we download the corresponding posters in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Downloading-movie-posters"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Selection of movies
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Selection-of-movies"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Movies on IMDb are uniquely identified by their imdb-id, consisting of the
+ letter 
+\begin_inset Quotes eld
+\end_inset
+
+tt
+\begin_inset Quotes erd
+\end_inset
+
+ followed by a seven-digit number.
+ In general, a higher number corresponds to a movie that was added to the
+ database more recently, but their are large gaps in the numbering.
+ Since there is no obvious scheme in the ids, which we can use to select
+ useful movies, we use the browse-by-genre sites instead.
+\end_layout
+
+\begin_layout Standard
+Each page lists a total of 50 movies.
+ Using the python library 
+\begin_inset CommandInset href
+LatexCommand href
+name "Beautiful Soup"
+target "https://www.crummy.com/software/BeautifulSoup"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Beautiful Soup"
+
+\end_inset
+
+, we retrieve the imdb-id of all movies on a given page.
+ As the id is acquired from the page of a particular genre, we know that
+ at least one genre will be present, making the movie useful for our purposes.
+\end_layout
+
+\begin_layout Standard
+There are a total of 24 genres scanned by our program:
+\end_layout
+
+\begin_layout Itemize
+Action
+\end_layout
+
+\begin_layout Itemize
+Adventure
+\end_layout
+
+\begin_layout Itemize
+Animation
+\end_layout
+
+\begin_layout Itemize
+Biography
+\end_layout
+
+\begin_layout Itemize
+Comedy
+\end_layout
+
+\begin_layout Itemize
+Crime
+\end_layout
+
+\begin_layout Itemize
+Documentary
+\end_layout
+
+\begin_layout Itemize
+Drama
+\end_layout
+
+\begin_layout Itemize
+Family
+\end_layout
+
+\begin_layout Itemize
+Fantasy
+\end_layout
+
+\begin_layout Itemize
+Film-Noir
+\end_layout
+
+\begin_layout Itemize
+History
+\end_layout
+
+\begin_layout Itemize
+Horror
+\end_layout
+
+\begin_layout Itemize
+Music
+\end_layout
+
+\begin_layout Itemize
+Musical
+\end_layout
+
+\begin_layout Itemize
+Mystery
+\end_layout
+
+\begin_layout Itemize
+Romance
+\end_layout
+
+\begin_layout Itemize
+Sci-Fi
+\end_layout
+
+\begin_layout Itemize
+Short
+\end_layout
+
+\begin_layout Itemize
+Sport
+\end_layout
+
+\begin_layout Itemize
+Superhero
+\end_layout
+
+\begin_layout Itemize
+Thriller
+\end_layout
+
+\begin_layout Itemize
+War
+\end_layout
+
+\begin_layout Itemize
+Western
+\end_layout
+
+\begin_layout Standard
+The superhero genre was dropped later, as there are too few movies in it
+ to reliably train a model.
+\end_layout
+
+\begin_layout Subsection
+Collecting movie details
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Collecting-movie-details"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Once we are in possession of the imdb-ids of the selected movies, we use
+ their individual details page to find their genres, the url of their poster
+ image as well as their title.
+ The title is not required for our training, it is saved merely in case
+ a human wishes to examine the data.
+ Imdb-ids, title, genres and poster url are stored in a dict to represent
+ one movie.
+ All movies are added to a list and then saved as a file using the 
+\begin_inset CommandInset href
+LatexCommand href
+name "pickle"
+target "https://docs.python.org/2/library/pickle.html"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "pickle"
+
+\end_inset
+
+ library.
+ These files are only readable by loading them with the same library, inspecting
+ this list with a simple text editor is not possible.
+\end_layout
+
+\begin_layout Standard
+This is the most time-consuming step in the process, as we need to wait
+ for the web page to load for each individual movie.
+ Later on, multiprocessing was added to speed this step up, though it is
+ important to limit the number of processes to avoid straining the server
+ too much, which can lead to the IP address being banned.
+\end_layout
+
+\begin_layout Subsection
+Downloading movie posters
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Downloading-movie-posters"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Using the poster url retrieved in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Collecting-movie-details"
+
+\end_inset
+
+, we merely need to download the image from there.
+ All posters are stored in a common folder using their imdb-id as a name
+ with the 
+\begin_inset Quotes eld
+\end_inset
+
+.jpg
+\begin_inset Quotes erd
+\end_inset
+
+ file-extension.
+\end_layout
+
+\begin_layout Standard
+Note that while almost all posters share the jpg format and the same dimensions
+ (182x268), some placeholder images use the png format.
+ These images are not recognized correctly by the postercollector-script
+ and will be mislabeled as 
+\begin_inset Quotes eld
+\end_inset
+
+.jpg
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_body
+\end_document

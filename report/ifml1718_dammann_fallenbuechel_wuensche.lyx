@@ -25,6 +25,7 @@
 \bibtex_command default
 \index_command default
 \paperfontsize default
+\spacing single
 \use_hyperref false
 \papersize default
 \use_geometry false
@@ -69,11 +70,21 @@
 \begin_body
 
 \begin_layout Title
-Title
+Classification of movies by genre based on posters
 \end_layout
 
 \begin_layout Author
-Authors
+Patrick Dammann (), Florian Fallenbüchel (), Thorsten Wünsche (3148266)
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "chapters/abstract.lyx"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -86,13 +97,49 @@ LatexCommand tableofcontents
 \end_layout
 
 \begin_layout Standard
+\begin_inset FloatList table
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FloatList figure
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 Kapitel Einfügen: Einfügen -> Datei -> Unterdokument..
+\end_layout
+
+\begin_layout Standard
+Für Tabellen und Bilder bitte die entsprechenden Gleitobjekte benutzen,
+ damit sie in den automatisch erstellten Verzeichnissen auftauchen
+\end_layout
+
+\begin_layout Standard
+Marker und Querverweise sind nützlich, um einzelne Textabschnitte nicht
+ von hand nummerieren zu müssen.
 \end_layout
 
 \begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand include
 filename "chapters/introduction.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "chapters/data_collection.lyx"
 
 \end_inset
 
@@ -113,6 +160,276 @@ filename "chapters/non_neural_network_methods.lyx"
 \begin_inset CommandInset include
 LatexCommand include
 filename "chapters/conclusion.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "OneVsRest"
+key "OneVsRest"
+
+\end_inset
+
+
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OneVsRestClassi
+fier.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "BernoulliNB"
+key "BernoulliNB"
+
+\end_inset
+
+
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.BernoulliNB.htm
+l
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "GaussianNB"
+key "GaussianNB"
+
+\end_inset
+
+
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "QDA"
+key "QDA"
+
+\end_inset
+
+
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://scikit-learn.org/stable/modules/generated/sklearn.discriminant_analysis.Quad
+raticDiscriminantAnalysis.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "knn"
+key "knn"
+
+\end_inset
+
+
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassi
+fier.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "Tree"
+key "Tree"
+
+\end_inset
+
+
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifie
+r.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "Forest"
+key "Forest"
+
+\end_inset
+
+
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClass
+ifier.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "SVC"
+key "SVC"
+
+\end_inset
+
+
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "LinearSVC"
+key "LinearSVC"
+
+\end_inset
+
+
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+http://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "IMDb"
+key "IMDb"
+
+\end_inset
+
+
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://www.imdb.com/
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "Beautiful Soup"
+key "Beautiful Soup"
+
+\end_inset
+
+
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://www.crummy.com/software/BeautifulSoup
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "pickle"
+key "pickle"
+
+\end_inset
+
+
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://docs.python.org/2/library/pickle.html
+\end_layout
 
 \end_inset
 
