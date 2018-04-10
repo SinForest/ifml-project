@@ -24,11 +24,15 @@ def test_distribution():
     te_load = DataLoader(te_set, batch_size=64, shuffle=False, num_workers=3, drop_last=True)
     pred = torch.Tensor([0.28188283, 0.23829031, 0.27430824, 0.39426496, 0.38900912, 0.22754676, 0.24563302, 0.11153192, 0.29865512, 0.14260318, 0.17011903, 0.0307621 , 0.20026279, 0.2485701 , 0.24037718, 0.17645695, 1. , 0.42100788, 0.11593755, 0.31264492, 0.62699026, 0.1946205 , 0.27446282])
     loss = 0
+    skipped = 0
     for X, y in tqdm(te_load, desc='rnd'):
         for i in range(X.size(0)):
-            loss += accuracy(pred, y[i])
+            try:
+                loss += accuracy(pred, y[i])
+            except:
+                skipped += 1
     
-    return loss / len(te_set)
+    return loss / (len(te_set) - skipped)
 
 
 
@@ -176,5 +180,5 @@ if __name__ == '__main__':
     # print(test_3rd_snapshot())
     # print(test_4th_snapshot())
     # print(test_5th_snapshot())
-    print(test_rnd_network())
+    # print(test_rnd_network())
     print(test_distribution())
