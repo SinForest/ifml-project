@@ -88,7 +88,7 @@ by Thorsten Wünsche
 \begin_layout Standard
 Our goal is to recognize a movies genres using only the movies poster.
  To train a machine learning model to do so, a large amount of movie posters,
- a lot of a list with the corresponding genres is required to build training,
+ as well as a list with the corresponding genres is required to build training,
  validation and test sets.
 \end_layout
 
@@ -152,7 +152,7 @@ name "sub:Selection-of-movies"
 
 \begin_layout Standard
 Movies on IMDb are uniquely identified by their imdb-id, consisting of the
- letter 
+ letters 
 \begin_inset Quotes eld
 \end_inset
 
@@ -162,7 +162,7 @@ tt
 
  followed by a seven-digit number.
  In general, a higher number corresponds to a movie that was added to the
- database more recently, but their are large gaps in the numbering.
+ database more recently, but there are large gaps in the numbering.
  Since there is no obvious scheme in the ids, which we can use to select
  useful movies, we use the browse-by-genre sites instead.
 \end_layout
@@ -374,7 +374,7 @@ reference "sub:Collecting-movie-details"
 \end_layout
 
 \begin_layout Standard
-Note that while almost all posters share the jpg format and the same dimensions
+Note, that while almost all posters share the jpg format and the same dimensions
  (182x268), some placeholder images use the png format.
  These images are not recognized correctly by the postercollector-script
  and will be mislabeled as 
