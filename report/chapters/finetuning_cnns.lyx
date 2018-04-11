@@ -684,6 +684,9 @@ Drama
  relatively generous.
  But this was needed to measure the accuracy consistent for the varying
  size of the target vectors.
+ With a large enough data set, we could filter movies with more or less
+ than a certain amount of different genres, to make the accuracy and loss
+ function more consistent, eventually leading to better results.
 \end_layout
 
 \end_body
