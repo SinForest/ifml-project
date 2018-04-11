@@ -8,6 +8,7 @@ import torch.optim as optim
 from torch.autograd import Variable as Var
 from torch import Tensor as Ten
 from core import PosterSet
+from core import accuracy
 from functools import reduce
 from reshapeLayer import ReshapeLayer
 import operator
@@ -17,11 +18,11 @@ DATA_PATH   = "../sets/set_splits.p"
 POSTER_PATH = "../posters/"
 DICT_PATH   = "../sets/gen_d.p"
 SETS_PATH   = "../sets/"
-MODEL_PATH  = "./squeezenet/squeezenet_127.nn"
+MODEL_PATH  = "./squeezenet/squeezenet_150.nn"
 CUDA_ON     = True
 DEBUG_MODE  = False
 
-num_epochs  = 150
+num_epochs  = 151
 batch_s     = 512
 learn_r     = 0.0001
 momentum    = 0.9
@@ -40,6 +41,9 @@ log_interval = np.ceil((len(train_loader.dataset) * log_percent) / batch_s)
 val_set = PosterSet(POSTER_PATH, p, 'val', gen_d=gen_d, tv_norm=True, augment=True, resize=input_size, debug=DEBUG_MODE)
 val_loader = torch.utils.data.DataLoader(val_set, batch_size=batch_s, shuffle=False, num_workers=4)
 
+test_set = PosterSet(POSTER_PATH, p, 'test', gen_d=gen_d, tv_norm=True, augment=False, resize=input_size, debug=DEBUG_MODE)
+test_loader = torch.utils.data.DataLoader(test_set, batch_size=batch_s, shuffle=False, num_workers=4)
+
 num_classes = (len(gen_d)//2)
 
 model = torchvision.models.squeezenet1_1(pretrained=True)
@@ -50,7 +54,7 @@ for param in model.features.parameters():
     param.requires_grad = False
 
 #replace classifier with one fitting number of classes
-final_conv = nn.Conv2d(512, num_classes, kernel_size = 1)
+final_conv = nn.Conv2d(512, num_classes, kernel_size = 1) #layer needs to be defined outside because of special initialisation of net
 classifier = nn.Sequential(
     nn.Dropout(p=0.5),
     final_conv,
@@ -133,10 +137,38 @@ def validate():
     
     return val_loss
 
+def test():
+    model.eval()
+    test_loss = 0
+    total_length = 0
+
+    for data, target in test_loader:
+
+        if CUDA_ON:
+            data, target = data.cuda(), target.cuda()
+        
+        data, target = Var(data, volatile = True), Var(target)
+
+        output = nn.functional.sigmoid(model(data))
+
+        for i in range(output.size(0)):
+            try:
+                if target.data[i].sum() == 0: continue
+                if target.data[i].sum() >= 12: continue    
+                test_loss += accuracy(output.data[i], target.data[i])
+                total_length += 1
+            except Exception as e:
+                print(e)
+                print(target.data[i])
+                sys.exit()
+    return test_loss / total_length
+
 loss_list = []
 val_list = []
 for epoch in range(epoch, num_epochs + 1):
     
+    print(test())
+    '''
     loss_list.append(train(epoch))
     val_loss = validate()
     scheduler.step(val_loss)
@@ -144,5 +176,5 @@ for epoch in range(epoch, num_epochs + 1):
     
     state = {'state_dict':model.state_dict(), 'optim':optimizer.state_dict(), 'epoch':epoch, 'train_loss':loss_list, 'val_loss': val_list}
     filename = "./squeezenet/squeezenet_{:03d}.nn".format(epoch)
-    torch.save(state, filename)
+    torch.save(state, filename) '''
 

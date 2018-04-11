@@ -43,9 +43,6 @@ num_classes = 23
 to_ten      = torchvision.transforms.ToTensor()
 to_pil      = torchvision.transforms.ToPILImage()
 scale       = torchvision.transforms.Resize(input_size) 
-#tar_class   = 1
-learn_r     = 0.001
-
 
 p = pickle.load(open(DATA_PATH, 'rb'))
 gen_d = pickle.load(open(DICT_PATH, 'rb'))
@@ -58,16 +55,16 @@ def hook_function(module, grad_in, grad_out):
 
 def relu_hook_function(module, grad_in, grad_out):
     if isinstance(module, nn.ReLU):
-        return (torch.clamp(grad_in[0], min=0.0),)
+        return (torch.clamp(grad_in[0], min=0.0),) #Updates ReLUs so that they only return positive gradients
 
 model = torchvision.models.vgg16(pretrained=True)
 
 for pos, module in model.features._modules.items():
     if isinstance(module, nn.ReLU):
-        module.register_backward_hook(relu_hook_function)
+        module.register_backward_hook(relu_hook_function) #loop through modules to register hook function to ReLUs
 
 first_layer = list(model.features._modules.items())[0][1]
-first_layer.register_backward_hook(hook_function)
+first_layer.register_backward_hook(hook_function) #register hook function to the first layer
 
 modules = list(model.children())[:-1] #delete classification layer
 model = nn.Sequential(*modules)
@@ -117,8 +114,8 @@ for set_name, id_name in zip(SETS, ID_LIST):
         tar = Var(tar_ten)
         tar = tar.cuda()
         output = model(var)
-        model.zero_grad()
-        output.backward(gradient=tar)
+        
+        output.backward(gradient=tar) #backprop with target vector for each label in the set
         pil_img = to_pil(gradients.data.cpu().squeeze(0))
         pil_img.save(SAVE_PATH + "_{}_{}_{}".format(set_name, id_name, labels[i]), "JPEG")
 
