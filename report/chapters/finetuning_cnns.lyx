@@ -1,0 +1,693 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Finetuning pretrained Neural Networks
+\end_layout
+
+\begin_layout Standard
+Florian Fallenbüchel, 3144974
+\end_layout
+
+\begin_layout Subsection
+Introduction
+\end_layout
+
+\begin_layout Standard
+Besides creating our own network for classification, we tried using known
+ model architectures pretrained on ImageNet.
+ The idea behind this was, that we could use the trained feature extraction
+ of large networks and just modify them, so that they learn to combine these
+ features to new conclusions fitting the classes of our data.
+ In order to do that we had to swap the classification layer of the respective
+ models to fit our number of classes and adjust the gradient requirements
+ of the convolutional layers to prevent them from learning.
+ The models we tried are
+\end_layout
+
+\begin_layout Itemize
+VGG16
+\end_layout
+
+\begin_layout Itemize
+ResNet50
+\end_layout
+
+\begin_layout Itemize
+DenseNet169
+\end_layout
+
+\begin_layout Itemize
+SqueezeNet1.1
+\end_layout
+
+\begin_layout Itemize
+Inception_v3(with Auxiliary Classifiers turned off)
+\end_layout
+
+\begin_layout Standard
+Also the classification layers have been slightly modified, like switching
+ a Rectified Linear Unit with a Randomized Leaky Rectified Linear Unit and
+ to handle our original input size, even though this was not possible for
+ Inception_v3 and only partly for ResNet50 as they needed quadratical inputs.
+ Concrete details of the implementation can be obtained in the respective
+ python scripts.
+ Where we could decide, we chose middlesized versions of the models to complete
+ the training in a reasonable amount of time and all models were generated
+ using the PyTorch package.
+ PyTorch made it really easy to get a pretrained model, which we then could
+ modify to our needings.
+ We did not take a version of AlexNet from PyTorch, since the other networks
+ are improvements of the ideas of AlexNet.
+\end_layout
+
+\begin_layout Subsection
+Training
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/flo/IFML/Project/ifml-project/saliencymaps/plots/plot_vgg16.png
+	lyxscale 50
+	width 49col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:VGG16"
+
+\end_inset
+
+VGG16
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/flo/IFML/Project/ifml-project/saliencymaps/plots/plot_resnet50.png
+	lyxscale 50
+	width 49col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:ResNet50"
+
+\end_inset
+
+ResNet50
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/flo/IFML/Project/ifml-project/saliencymaps/plots/plot_densenet169.png
+	lyxscale 50
+	width 49col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:DenseNet169"
+
+\end_inset
+
+DenseNet169
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/flo/IFML/Project/ifml-project/saliencymaps/plots/plot_squeezenet.png
+	lyxscale 50
+	width 49col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:SqueezeNet1.1"
+
+\end_inset
+
+SqueezeNet1.1
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename /home/flo/IFML/Project/ifml-project/saliencymaps/plots/plot_inception_v3.png
+	lyxscale 50
+	width 49col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Inception_v3"
+
+\end_inset
+
+Inception_v3
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Training-and-validation"
+
+\end_inset
+
+Training and validation loss over 100 epochs for every pretrained architecture
+ used.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For all models we used the Binary Cross Entropy loss function, just as for
+ our custom network.
+ The optimizer was Adam, an optimizer that can update network weights iterative,
+ based on the training data.
+ We also used a scheduler that adjusted the learning rate after the validation
+ loss reached a plateau.
+ During training the models behaved quite differently.
+ 
+\end_layout
+
+\begin_layout Standard
+VGG16 started with an already relatively low training loss and an even lower
+ validation loss after the first epoch, but right after that the two curves
+ diverge with the increase of the validation loss being as high as the improveme
+nt of the training loss as you can see in 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "fig:VGG16"
+
+\end_inset
+
+.
+ After 100 epochs VGG16 has a training loss of about 0.2, but a validation
+ loss of about 18.5, indicating a lot of overfitting.
+ Remembering the fact that VGG16 has a lot of weights connecting the featurelaye
+rs to the first fully connected layer, overfitting on our relatively small
+ trainset of about 35000 pictures seems like a logical consequence.
+ VGG16 still got a quite reasonable accuracy of 76.27% on our testset with
+ our custom accuracy function described earlier.
+\end_layout
+
+\begin_layout Standard
+For ResNet50 there is quite a big difference between the two losses right
+ from the beginning, shown in 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "fig:ResNet50"
+
+\end_inset
+
+.
+ ResNet50 seems to learn the training data faster than VGG16, but with no
+ benefit to the validation loss.
+ Also the validation loss is varying a lot, even after the training loss
+ converged, which makes us believe that ResNet50 is 
+\begin_inset Quotes eld
+\end_inset
+
+guessing
+\begin_inset Quotes erd
+\end_inset
+
+ more.
+ At convergence, ResNet50 is knowing the data quite well with a training
+ loss of about 6.5, which is worse than VGG16s training loss and around the
+ loss of our custom created network, but with a validation loss only varying
+ around 10.
+ The worse training loss of ResNet50 is probably due to its smaller size,
+ compared to VGG.
+ The depth of ResNet also doesn't seem to help solving our task, leading
+ to an accuracy of 59.96% on the test set.
+\end_layout
+
+\begin_layout Standard
+The loss distribution for DenseNet169 at 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "fig:DenseNet169"
+
+\end_inset
+
+ seems quite similar to the one of ResNet50, but with a quite noticable
+ dip from the training loss at around 50 epochs and the simultaneous rise
+ of the validation loss.
+ At this point the learning rate got reduced, because the validation loss
+ was stagnating.
+ Usually this is done to improve validation accuracy, but here it only helped
+ the training loss.
+ Even though DenseNet169 has the biggest physical size of the five networks
+ here (3 times the size of VGG16, statefile at around 1.7 GB), its training
+ loss is still worse than VGG16 and its validation loss is the worst of
+ them all.
+ With its test accuracy of 59.89%, DenseNet169 is closely behind ResNet50
+ and therefore the second worst network of the five that we tested.
+\end_layout
+
+\begin_layout Standard
+Squeezenet1.1 showed the most unusual behavior as you can see in 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "fig:SqueezeNet1.1"
+
+\end_inset
+
+.
+ It started with the worst training loss of them all, but had a really steep
+ learning curve to a point where the training and validation losses are
+ quite the same.
+ After this point the network was not learning anything at all.
+ We tried starting with different learning rates and varying scheduler settings,
+ all leading to the same result in more or less time.
+ SqueezeNet1.1 was designed to gain the same accuracy as AlexNet on the ImageNet
+ data set, but taking 50 times less parameters.
+ So while SqueezeNet is really fast and efficient, it doesn't seem to be
+ suitable for our kind of task, which is also shown by the 46.13% test accuracy.
+\end_layout
+
+\begin_layout Standard
+At last, Google's Inception_v3 was the only network architecture that showed
+ a good convergence for our data set.
+ Starting with an already relatively low training loss, shown in 
+\begin_inset CommandInset ref
+LatexCommand formatted
+reference "fig:Inception_v3"
+
+\end_inset
+
+, both curves slowly converge towards a reasonable loss level.
+ The interesting part here is, that the validation loss is constantly lower
+ than the training loss.
+ We are not sure on why this is happening.
+ For our training we turned the auxilliary classifiers off, as their helping
+ effect only kicks in on high accuracies.
+ Maybe we have already reached such a point after 100 epochs and the auxilliary
+ classifiers would have improved at least the training loss, but there was
+ not enough time to test them.
+ But even without those Inception_v3 reached the highest test accuracy with
+ 80.23%, as it also has the best validation loss.
+ Considering Inception_v3s size, compared to VGG16 or even DenseNet169,
+ this is a really good result.
+\end_layout
+
+\begin_layout Subsection
+Conclusion
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="2">
+<features rotate="0" tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Model
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Accuracy
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+VGG16
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+76.27%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ResNet50
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+59.96%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+DenseNet169
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+59.89%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+SqueezeNet1.1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+46.13%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Inception_v3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+80.23%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Accuracy of the different network architectures on the test set after 100
+ epochs of training.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Finetuning pretrained network models resulted in mixed outcomes.
+ Three of our five architectures suffered from overfitting and SqueezeNet1.1
+ didn't really seem to learn anything at all.
+ But on the other hand, Inception_v3 got in a small amount of time to the
+ level of our best custom architecture, taking way less consideration for
+ design aspects.
+ The overfitting might be due to our relatively small data set, used with
+ architectures that were designed for a larger scale task.
+ This is a problem we have to address in future work, as well as the bias
+ of the data set.
+ Because of the relatively huge representation of the category 
+\begin_inset Quotes eld
+\end_inset
+
+Drama
+\begin_inset Quotes erd
+\end_inset
+
+, the networks naturally get a better loss if they guess this category in
+ principle.
+ If a network is only giving outputs according to the distribution of the
+ categories, it is already getting an accuracy of about 65% with our accuracy
+ function.
+ With this in mind, the results of DenseNet169 and ResNet50 are even worse,
+ not to mention SqueezeNet1.1.
+ But these results might vary with a bigger data set.
+ Only VGG16 and Inception_v3 had decent results, with VGG16 overfitting
+ a lot.
+ In future work we would try a smaller version of the VGG architecture,
+ to see if the results are similar, but without overfitting too much on
+ the data.
+ Also it would be interesting to see if Inception_v3 with a custom classifier
+ can get even better with a way bigger, unbiased data set.
+ Also we would need a better accuracy function, because our function was
+ relatively generous.
+ But this was needed to measure the accuracy consistent for the varying
+ size of the target vectors.
+ With a large enough data set, we could filter movies with more or less
+ than a certain amount of different genres, to make the accuracy and loss
+ function more consistent, eventually leading to better results.
+\end_layout
+
+\end_body
+\end_document

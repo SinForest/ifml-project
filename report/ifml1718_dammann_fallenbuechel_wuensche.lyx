@@ -195,6 +195,26 @@ filename "chapters/cnn_training.lyx"
 \begin_layout Standard
 \begin_inset CommandInset include
 LatexCommand include
+filename "chapters/finetuning_cnns.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "chapters/saliency.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
 filename "chapters/conclusion.lyx"
 
 \end_inset

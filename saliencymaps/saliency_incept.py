@@ -38,11 +38,11 @@ ID_LIST = [
     "tt0037075",
 ]
 
-input_size  = (299, 299)
+input_size  = (299, 299) #input fitting the network
 num_classes = 23
 to_ten      = torchvision.transforms.ToTensor()
 to_pil      = torchvision.transforms.ToPILImage()
-scale       = torchvision.transforms.Resize(input_size) 
+scale       = torchvision.transforms.Resize(input_size) #resize image to match input size
 #tar_class   = 1
 learn_r     = 0.001
 
@@ -58,19 +58,19 @@ def hook_function(module, grad_in, grad_out):
 
 def relu_hook_function(module, grad_in, grad_out):
     if isinstance(module, nn.ReLU):
-        return (torch.clamp(grad_in[0], min=0.0),)
+        return (torch.clamp(grad_in[0], min=0.0),) #Updates ReLUs so that they only return positive gradients
 
 model = torchvision.models.inception_v3(pretrained=True)
 model.aux_logits=False
 
 for module in model.children():
     if isinstance(module, nn.ReLU):
-        module.register_backward_hook(relu_hook_function)
+        module.register_backward_hook(relu_hook_function) #loop through modules to register hook function to ReLUs
 
 first_layer = list(model.children())[0]
-first_layer.register_backward_hook(hook_function)
+first_layer.register_backward_hook(hook_function) #register grad saving hook
 
-model.fc = nn.Linear(2048, num_classes)
+model.fc = nn.Linear(2048, num_classes) #replace classification layer
 
 try:
     model_state = torch.load(MODEL_PATH)
@@ -105,7 +105,7 @@ for set_name, id_name in zip(SETS, ID_LIST):
         tar = tar.cuda()
         output = model(var)
         model.zero_grad()
-        output.backward(gradient=tar)
+        output.backward(gradient=tar) #backprop with target vector for each label in the set
         pil_img = to_pil(gradients.data.cpu().squeeze(0))
         pil_img.save(SAVE_PATH + "_{}_{}_{}".format(set_name, id_name, labels[i]), "JPEG")
 

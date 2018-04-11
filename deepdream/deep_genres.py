@@ -12,6 +12,8 @@ import model
 import operator
 import os, sys
 
+#wrongly implemented, sadly it didnt work for us in time
+
 MODEL_PATH  = "model_0260_67929.nn"
 IMAGE_PATH  = "bladerunner2.jpeg"
 CUDA_ON     = True
@@ -58,10 +60,10 @@ if CUDA_ON:
 for i in range(1, 251):
     optimizer.zero_grad()
     
-    #x = var
+    
     output = model(var)
     loss = criterion(output, tar)
-    #loss = -torch.mean(output)
+
 
     loss.backward()
     optimizer.step()
