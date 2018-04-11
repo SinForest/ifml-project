@@ -81,6 +81,14 @@ Feature Extraction
 \end_layout
 
 \begin_layout Standard
+Patrick Dammann (3144913)
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 For many machine learning approaches, images pose a hard challenge.
  They are made of high dimensional data that is correlated in hard to determine
  ways.
@@ -94,27 +102,8 @@ For many machine learning approaches, images pose a hard challenge.
 \begin_layout Standard
 Over the last years, convolutional neural networks have proven to be the
  state-of-the-art method for extracting meaningful features from images.
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-citation needed
-\end_layout
-
-\end_inset
-
- While these vectors are hard to interpret by humans
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-citation needed
-\end_layout
-
-\end_inset
-
-, many machine learning algorithms perform a lot better on them than on
- images.
+ While these vectors are hard to interpret by humans, many machine learning
+ algorithms perform a lot better on them than on images.
  Some approaches in this project require strong features, which is why we
  decided to extract and compare features of different, pretrained neural
  networks.
@@ -165,19 +154,6 @@ How it works
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-image, alex net filter visu?
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 Convolutional neural networks process data layer-wise.
  Each layer here takes an input of information and transforms it to an output
  containing higher-level information.
@@ -217,44 +193,12 @@ The different architectures
 
 \begin_layout Standard
 We have tried different network architectures to extract feature vectors.
- All of these architectures come from the torchvision
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-link needed
-\end_layout
-
-\end_inset
-
- module and are pretrained on ImageNet
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-link needed
-\end_layout
-
-\end_inset
-
-, a famous dataset containing 
+ All of these architectures come from the torchvision module and are pretrained
+ on ImageNet, a famous dataset containing 
 \begin_inset Formula $1.2$
 \end_inset
 
  million labeled photographs.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-trained on other data
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Description
@@ -273,27 +217,8 @@ deep-learning-boom
 \end_layout
 
 \begin_layout Description
-VGG19BN This is the biggest network
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-check
-\end_layout
-
-\end_inset
-
- proposed in 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-ref
-\end_layout
-
-\end_inset
-
-, modified with additional batch normalization layers.
+VGG19BN This is the biggest network proposed in the VGG paper, modified
+ with additional batch normalization layers.
  It shares a similar architecture with AlexNet, but exchanges the convolutional
  layers, that mostly utilize big filters, with stacks of multiple convolutional
  layers with small filters, which reduces parameter count and improves the
@@ -337,16 +262,7 @@ Implementation
 \end_layout
 
 \begin_layout Standard
-All features have been extracted using pretrained models form the torchvision
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-ref
-\end_layout
-
-\end_inset
-
+All features have been extracted using pretrained models from the torchvision
  module, by slightly modifying their behavior.
  For AlexNet and VGG19, the last fully connected layer has been removed,
  while for ResNet and DenseNet hook functions have been registered to return

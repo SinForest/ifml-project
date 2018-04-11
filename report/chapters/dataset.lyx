@@ -81,6 +81,14 @@ Creating Datasets
 \end_layout
 
 \begin_layout Standard
+Patrick Dammann (3144913)
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 For our used methods, a split of the data is required, which is why we have
  split up the data into three sets:
 \end_layout
@@ -158,16 +166,9 @@ on needs to come from somewhere).
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-size 
-\end_layout
-
-\end_inset
-
-
+The final dataset for us to work with contains overall 64353 images: 31520
+ in the training set, 13522 in the validation set and 19311 in the test
+ set.
 \end_layout
 
 \begin_layout Subsection

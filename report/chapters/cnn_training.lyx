@@ -81,8 +81,42 @@ Training a Neural Network
 \end_layout
 
 \begin_layout Standard
+Patrick Dammann (3144913)
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 This sub-project has its focus on training a convolutional neural network
  on detecting the genres of movies by their respective posters.
+ The first two subsections contain information to be known before the following
+ subsections are read.
+ Subsection 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Approaches"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ explains all the experiments made (=models trained) in this chapter, subsection
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Baselines"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ gives hints on how to interpret our metric.
+ The final two subsections concentrate on the final testing and the overall
+ conclusion of this sub-project.
 \end_layout
 
 \begin_layout Subsection
@@ -302,6 +336,12 @@ The
 \end_layout
 
 \begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Approaches"
+
+\end_inset
+
 Approaches
 \end_layout
 
@@ -404,17 +444,8 @@ both:
 \end_layout
 
 \begin_layout Standard
-The small architecture is inspired by VGG 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-ref
-\end_layout
-
-\end_inset
-
-, especially its convolutional layers.
+The small architecture is inspired by VGG, especially its convolutional
+ layers.
  Instead of big filters, multiple convolutional layers with small filters
  are used before each pooling layer.
 \end_layout
@@ -449,17 +480,7 @@ noprefix "false"
 
 \end_inset
 
-, we optimize our network with Adam
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-ref
-\end_layout
-
-\end_inset
-
-.
+, we optimize our network with Adam.
 \end_layout
 
 \begin_layout Standard
@@ -651,7 +672,7 @@ In this milestone, the first architecture has been trained again, but this
 \end_layout
 
 \begin_layout Standard
-This time, as shown in 
+This time, as shown in figure 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "fig:4th-5th"
@@ -675,15 +696,48 @@ Medium Network (random crop)
 \end_layout
 
 \begin_layout Standard
-This is the same training process as before, but with a bigger network architect
-ure, which has more feature maps per convolutional layer and more neurons
- in the first fully connected layer.
+Here we use the same training process as before, but with a bigger network
+ architecture, which has more feature maps per convolutional layer and more
+ neurons in the first fully connected layer.
  Also, the learning rate scheduler as been weakened, since it seemed like
  it might induce convergence too soon by making the learning rate too small.
 \end_layout
 
-\begin_layout Subsection
-Baselines
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This was the most successful experiment in this sub-project, as one can
+ see in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:4th-5th"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ (r).
+ First, the training and validation loss behave just like in the last experiment
+, but after 
+\begin_inset Formula $100$
+\end_inset
+
+ epochs, the training loss crosses the validation loss at a value of 
+\begin_inset Formula $\sim6.25$
+\end_inset
+
+, which is better then all losses achieved so far, to then further decent.
+ One assumption is, that the artificial enlargement of the dataset in the
+ previous experiment helped the model to not overfit, but the enlarged model
+ size in this experiment, while helping to achieve better scores, gave the
+ model more tendency to overfit, since it might now be able to memorize
+ more of the augmented data.
 \end_layout
 
 \begin_layout Standard
@@ -691,7 +745,322 @@ Baselines
 \end_layout
 
 \begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Baselines"
+
+\end_inset
+
+Baselines
+\end_layout
+
+\begin_layout Standard
+To get an impression on how to interpret the accuracy measure from 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Output-+-Metrics"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, this section gives some baselines:
+\end_layout
+
+\begin_layout Itemize
+when evaluating our models on the test set, without training them at all,
+ they achieve 
+\begin_inset Formula $40\%-60\%$
+\end_inset
+
+ accuracy
+\end_layout
+
+\begin_layout Itemize
+when using random numbers 
+\begin_inset Formula $\in\left[0,1\right]^{23}$
+\end_inset
+
+ as outputs, the expected accuracy is 
+\begin_inset Formula $50\%$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+when outputting the genres in the order of how often they occur in the training
+ set, ignoring the input, the accuracy on the test set is 
+\begin_inset Formula $66.5\%$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Testing
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="2" columns="7">
+<features islongtable="true" longtabularalignment="center">
+<column alignment="center" valignment="top" width="12text%">
+<column alignment="center" valignment="top" width="12text%">
+<column alignment="center" valignment="top" width="12text%">
+<column alignment="center" valignment="top" width="12text%">
+<column alignment="center" valignment="top" width="12text%">
+<column alignment="center" valignment="top" width="12text%">
+<column alignment="center" valignment="top" width="12text%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+test set
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\color lightgray
+Random
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\color lightgray
+Distri-bution
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Smaller
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Small
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Small (Crop)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Middle (Crop)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+accuracy
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\color lightgray
+50.00%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\color lightgray
+66.50%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+74.87%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+76.04%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+78.08%
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+80.86%
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+This table shows the baselines from 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Baselines"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ (in gray) and compares them with the accuracy of the
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:This-table-shows"
+
+\end_inset
+
+ different models.
+ The accuracy is measured as explained in 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Output-+-Metrics"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this chapter, we evaluate all models with our accuracy measure from 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Output-+-Metrics"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ with the (not-before-used) test set.
+ In general, this is done in the exact same way as the validation steps,
+ but with the model snapshot that achieved the best validation loss.
+ The scores, which can be seen in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:This-table-shows"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+, are congruent with our assumptions, where the smallest model performs
+ worse, the biggest model best, and the random crops improve the performance.
+ Also, all models perform better than simply learning the genre distribution
+ over the whole training set.
+ Unfortunately, we have not found any models to compete ours with.
+\end_layout
+
+\begin_layout Subsection
 Conclusion
+\end_layout
+
+\begin_layout Standard
+The performances of our models show, that the task might indeed be solvable.
+ We still can't be sure, that the correlation between movie poster and movie
+ genre is strong enough to get high accuracy, but we could surely get better
+ than this with bigger models and more data.
+ Especially the last point was hard, because IMDb seems to block IPs that
+ crawl to many information at once.
+ Compared to other deep convolutional neural networks that people claim
+ to have trained on other tasks, our 
+\begin_inset Formula $\sim65.000$
+\end_inset
+
+ images seem way too less to fully train our model.
+ With more data, training a bigger model would have made more sense, which
+ is a task that could easily be done in the future, if one slowly collects
+ more data until then.
 \end_layout
 
 \end_body
