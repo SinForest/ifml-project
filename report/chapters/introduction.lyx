@@ -1,7 +1,9 @@
-#LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 474
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
 \begin_document
 \begin_header
+\save_transient_properties true
+\origin unavailable
 \textclass article
 \use_default_options true
 \maintain_unincluded_children false
@@ -9,16 +11,18 @@
 \language_package default
 \inputencoding auto
 \fontencoding global
-\font_roman default
-\font_sans default
-\font_typewriter default
-\font_math auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
-\font_sf_scale 100
-\font_tt_scale 100
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -47,6 +51,7 @@
 \suppress_date false
 \justification true
 \use_refstyle 1
+\use_minted 0
 \index Index
 \shortcut idx
 \color #008000
@@ -55,7 +60,10 @@
 \tocdepth 3
 \paragraph_separation indent
 \paragraph_indentation default
-\quotes_language english
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
@@ -80,9 +88,15 @@ name "sec:Introduction"
 \end_layout
 
 \begin_layout Standard
-
-\emph on
-Hier könnte ein cleverer Absatz darüber stehen, warum wir tun was wir tun.
+Everybody knows movie poster clichés, like two big heads looking in each
+ others eyes in front of the blue sky, or sinister eyes gleaming towards
+ you from the darkness.
+ Humans are quite good at spotting these and immediately make up their mind
+ about what they might like or detest regarding the corresponding move.
+ Also, which seems much easier, they tend to know the approximate genre
+ of the movie.
+ When training machine learning models on this task, one might get a better
+ insight on this correlation.
 \end_layout
 
 \begin_layout Standard
@@ -93,7 +107,7 @@ There are several different ways to approach this task.
  While the number of feature dimensions is too high for more traditional
  approaches, neural networks can also be used to select and combine features.
  This would give even linear learners a chance to categorize movies by their
- genre based on thier poster.
+ genre based on their poster.
 \end_layout
 
 \begin_layout Standard
@@ -102,6 +116,7 @@ To achieve this goal, we gather movie poster along with their corresponding
 \begin_inset CommandInset citation
 LatexCommand cite
 key "IMDb"
+literal "true"
 
 \end_inset
 
@@ -116,15 +131,15 @@ reference "sec:Data-collection"
 .
  Using different neural networks, we extract features from these posters,
  as is detailed in chapter 
-\end_layout
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Feature-Extraction"
+plural "false"
+caps "false"
+noprefix "false"
 
-\begin_layout Standard
+\end_inset
 
-\emph on
-Hier Querverweis einfügen
-\end_layout
-
-\begin_layout Standard
 .
  In chapter 
 \begin_inset CommandInset ref
@@ -134,88 +149,17 @@ reference "sec:Comparison-of-methods"
 \end_inset
 
 , we compare the performance of eight non neural network classifiers on
- the six extracted feature sets.
-\end_layout
-
-\begin_layout Standard
-
-\emph on
-Hier könnten Ihre Kapitel stehen
-\emph default
-.
-\end_layout
-
-\begin_layout Standard
-Finally, we summarize our results in chapter 
+ the six extracted feature sets, while chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "sec:Conclusion"
+reference "sec:Training-a-Neural"
+plural "false"
+caps "false"
+noprefix "false"
 
 \end_inset
 
-<<<<<<< HEAD
-\emph on
-Hier könnte ein cleverer Absatz darüber stehen, warum wir tun was wir tun.
-\end_layout
-
-\begin_layout Standard
-There are several different ways to approach this task.
- While it is possible to train a neural network from the ground up, it is
- also possible to adjust an existing network, reducing the time and training
- data required.
- While the number of feature dimensions is too high for more traditional
- approaches, neural networks can also be used to select and combine features.
- This would give even linear learners a chance to categorize movies by their
- genre based on thier poster.
-\end_layout
-
-\begin_layout Standard
-To achieve this goal, we gather movie poster along with their corresponding
- genres from the Internet Movie Database
-\begin_inset CommandInset citation
-LatexCommand cite
-key "IMDb"
-
-\end_inset
-
-.
- This process is described in chapter 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Data-collection"
-
-\end_inset
-
-.
- Using different neural networks, we extract features from these posters,
- as is detailed in chapter 
-\end_layout
-
-\begin_layout Standard
-
-\emph on
-Hier Querverweis einfügen
-\end_layout
-
-\begin_layout Standard
-.
- In chapter 
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sec:Comparison-of-methods"
-
-\end_inset
-
-, we compare the performance of eight non neural network classifiers on
- the six extracted feature sets.
-\end_layout
-
-\begin_layout Standard
-
-\emph on
-Hier könnten Ihre Kapitel stehen
-\emph default
-.
+ will focus on the opposite by training a full neural network.
 \end_layout
 
 \begin_layout Standard

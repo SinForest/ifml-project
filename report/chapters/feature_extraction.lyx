@@ -77,6 +77,12 @@
 \begin_body
 
 \begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Feature-Extraction"
+
+\end_inset
+
 Feature Extraction
 \end_layout
 
